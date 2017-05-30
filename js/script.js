@@ -21,7 +21,7 @@ navigator.getUserMedia = (
 function initTimer(){
 
 	window.clearInterval(timer);
-    //$('#timer').html(timerOut);//.fadeIn('slow');
+    $('#timer').html('');//.fadeIn('slow');
 
 	var i = timerOut;
 	timer = window.setInterval(function(){
@@ -223,7 +223,7 @@ function init(){
 window.onload = init;
 
 $(document).on('ready', function(){
-        show('init');
+        show('home');
         
         $('#start-btn').on('click', function(){
     		show('prepare');
