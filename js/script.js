@@ -6,7 +6,8 @@ var timer = null
 ,   streamObj = null
 ,   ctx = null
 ,   $video = null
-,   $canvas = null;    
+,   $canvas = null
+,   $iframe = null; 
 
 timerOut = typeof timerOut == 'undefined' ? 3 : timerOut;
 navigator.getUserMedia = (
@@ -20,21 +21,21 @@ navigator.getUserMedia = (
 function initTimer(){
 
 	window.clearInterval(timer);
-            $('#timer').html(timerOut);//.fadeIn('slow');
-        
+    //$('#timer').html(timerOut);//.fadeIn('slow');
+
 	var i = timerOut;
 	timer = window.setInterval(function(){
-                if( i <= 0 ) {
+        if( i <= 0 ) {
 			window.clearInterval(timer);
-                        
-                        //$('#timer').fadeOut('slow', function(){
-                            show('preview');
-                        //});
-	                
+            
+            //$('#timer').fadeOut('slow', function(){
+                show('preview');
+            //});
+        
 		}else {
-                    $('#timer').html(i);
-                }
-                --i;
+            $('#timer').html(i);
+        }
+            --i;
 	}, 1000);
 
 
@@ -72,12 +73,81 @@ function openCamera(){
     
 }
 
+function share(type){
+    var isSubmit = $('#preview-page').attr('data-submit') ? true : false
+    ,   imgURL = $canvas.toDataURL('image/png');
+
+    if( isSubmit ) {
+        // Send Ajax
+        $('#preview-page').removeAttr('data-submit');
+    
+        var data = {
+            'action' : type,
+            'data'   : {
+                'img'   : imgURL
+            }   
+        }
+
+        $.post( siteUrl + 'ajax/common.php', data, function(results){
+            // Success
+        });
+
+    }else {
+
+        // Show Popup to get user input
+        $('#preview-page').attr('data-submit', type);
+        $('#share-inp-block, #share-inp-block .inp').hide();
+
+        switch(type) {
+            
+            case 'mail' :
+                $('#share-inp-block, #share-inp-block .email').fadeIn('slow', function(){
+                    $(this).focus();
+                });
+            break;
+
+            case 'sms' :
+                $('#share-inp-block, #share-inp-block .contact-no').fadeIn('slow', function(){
+                    $(this).focus();
+                });
+
+            break;
+
+            default :
+
+
+
+                $('#load-frame').remove();
+                $('#preview-page').append('<iframe id="load-frame" class="frame" frameborder="0" allowfullscreen ></iframe>');
+
+
+                $iframe = $('#load-frame').contents().find('body')[0];   
+                $iframe.style.overflow = 'hidden';
+
+                if( type == 'print' ) {
+                    // Print
+                    $iframe.innerHTML = '<img src="'+ imgURL +'" style="width: 100%; height: 100%" onload="window.print();"/>';
+
+                }
+
+            break;
+
+        }
+    }
+
+
+    
+}
+
 function preview(){
+    //$canvas.style.opacity = '1';
+    $('#share-inp-block, #share-inp-block .inp').hide();
     ctx.drawImage($video, 0, 0, $canvas.width, $canvas.height);
     
     $('#share-pane').addClass('pop');
     setTimeout(function(){
         $('#share-pane').removeClass('pop-down');
+
     }, 1500);
         
     timer = window.setTimeout(function(){
@@ -101,9 +171,9 @@ function show(page){
 
 			// Home 
 			page = 'home';
-                        $('#share-pane .icon.active').removeClass('active');
+            $('#share-pane .icon.active').removeClass('active');
 
-                break;
+        break;
             
             
 		case 'prepare' :
@@ -121,12 +191,12 @@ function show(page){
 			
 		break;
             
-                case 'preview' :
-                    
-                        preview();
-                        streamObj.getVideoTracks()[0].stop();
-                        
-                break;
+        case 'preview' :
+            
+            preview();
+            streamObj.getVideoTracks()[0].stop();
+                
+        break;
 		
 	}
 
@@ -135,6 +205,14 @@ function show(page){
 	});
 
 }
+
+function resetShare(){
+    $('#load-frame').remove();
+    $('#share-pane .icon.active').removeClass('active');
+    $('#preview-page').removeAttr('data-submit');
+    $('#share-inp-block, #share-inp-block .inp').hide();
+}
+
 
 function init(){
     
@@ -145,23 +223,52 @@ function init(){
 window.onload = init;
 
 $(document).on('ready', function(){
-        show('home');
+        show('init');
         
         $('#start-btn').on('click', function(){
-		show('prepare');
-	});
+    		show('prepare');
+    	});
         
         $('#share-pane .icon').on('click', function(){
             var id = $(this).attr('id');
-            $('#share-pane .icon.active').removeClass('active');
+            resetShare();
             $(this).addClass('active');
+            
+
+            //$canvas.style.opacity = '0';
             
             switch(id) {
                 
                 case 'share-retake-btn' :
                     
                     show('prepare');
-                break;    
+                break;  
+
+                case 'share-print-btn' :
+
+                    share('print');
+
+                break;
+
+                case 'share-mail-btn' :
+
+                    share('mail');
+                break;
+
+                case 'share-sms-btn' :
+
+                    share('sms');
+                break;  
+
+                case 'share-fb-btn' :
+
+                    share('fb');
+                break;
+
+                case 'share-tw-btn' :
+
+                    share('tw');
+                break;
                 
                 default :
                     show('home');

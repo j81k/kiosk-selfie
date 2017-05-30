@@ -33,15 +33,31 @@ include_once './header.php';
         <div class="frame-wrapper">
             <canvas id="preview-frame" class="frame"></canvas>    
         </div>
+
+        <div id="share-inp-block" class="middle">
+            <form>
+                <input type="email" class="inp email" placeholder="email@example.com" />
+                <input type="text" class="inp contact-no" placeholder="+91xxxxxxxxxx" />
+
+                <button class="btn">Share</button>
+            </form>
+        </div>
         
         <div id="share-pane" class="pop-down">
             <i id="share-home-btn" class="fa fa-home icon"></i>
-            <i class="fa fa-mail-reply icon"></i>
+            <i id="share-sms-btn" class="fa fa-commenting icon"></i>
+            <i id="share-mail-btn" class="fa fa-envelope-o icon"></i>
             <i id="share-retake-btn" class="fa fa-recycle icon"></i>
-            <i class="fa fa-facebook-f icon"></i>
-            <i class="fa fa-twitter icon"></i>
+            <i id="share-fb-btn" class="fa fa-facebook-f icon"></i>
+            <i id="share-tw-btn" class="fa fa-twitter icon"></i>
+            <i id="share-print-btn" class="fa fa-print icon"></i>
         </div>
+
+
+
     </section>
+
+
 
 
 <?php

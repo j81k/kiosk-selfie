@@ -6,12 +6,14 @@
  */
 
 define( 'SITE_NAME', 'Kiosk' );
-define( 'SHOT_TIMEOUT', 3); // in Seconds
-define( 'IDLE_TIMEOUT', 30 ); // Timeout for get back to Home screen, if not clicked on any sharing option in "preview" page.
+define( 'SHOT_TIMEOUT', 1); // in Seconds
+define( 'IDLE_TIMEOUT', 3000 ); // Timeout for get back to Home screen, if not clicked on any sharing option in "preview" page.
+define( 'UPLOAD_DIR',	__DIR__ . '/uploads/' );
+
+// Email
+define( 'MAIL_FROM',	'Admin<admin@kiosk.com>' );
 
 // ------------------------------------------------------
 $protocol = $_SERVER['HTTPS'] == 'on' ? 'https' : 'http';
 define( 'SITE_URL',  $protocol.'://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'] );
-
-//echo '<pre>'; print_r( SITE_URL ); die;
 

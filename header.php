@@ -29,7 +29,8 @@ require_once './config.php';
         <link rel="stylesheet" href="<?php echo SITE_URL; ?>css/font-awesome.min.css" />
         <link rel="stylesheet" href="<?php echo SITE_URL; ?>css/style.css" />
         <script type="text/javascript">
-            var timerOut = <?php echo SHOT_TIMEOUT; ?>;
+            var siteUrl     = '<?php echo SITE_URL; ?>';
+            var timerOut    = <?php echo SHOT_TIMEOUT; ?>;
             var idleTimeout = <?php echo IDLE_TIMEOUT; ?>;
         </script>
         
