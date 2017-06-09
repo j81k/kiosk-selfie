@@ -3,13 +3,17 @@
  * Created On   : 2017-05-28 23:15
  */
 
-.bg-home {
+body {
+    background: url(../images/bg.png);
+}
+
+/*.bg-home {
     background: url(../images/bg-home.jpg);
 }
 
 .bg-prepare {
     background: url(../images/bg-prepare.jpg);
-}
+}*/
 
 .page {
     display: none;
@@ -45,27 +49,36 @@
 }
 
 #start-btn {
-    background: linear-gradient(#333, #fff);
-    border-radius: 100px;
-    border: 5px solid #eee;
-    box-shadow: 3px 3px 9px #333;
-    width: 115px;
     
+    left: 0%;
+    top: 30%;
+    width: 100%;
+    position: absolute;
+    cursor: pointer;
+    background: #df3831;
+    text-align: center;
+    box-shadow: 3px 3px 9px #333;
 }
 
 #start-icon {
-    padding-left: 20px;
-    font-size: 78px;
-    color: #fff;
-    
+    margin-bottom: 30px;
 }
 
-#start-btn span {
+#start-icon i {
+    font-size: 250px;
+    color: #fff;
+}
+
+#start-text {
+    font-family: monospace;
+    line-height: 58px;
+    background: #a25d5e;
     font-weight: bold;
-    color: #f33;
+    color: #e7df10;
     letter-spacing: 3px;
     font-size: 35px;
     text-shadow: 1px 1px 3px #333;
+
 }
 
 @keyframes fade {
@@ -88,9 +101,11 @@
 
 /** Get Ready **/
 #get-ready-msg {
-    color: #fff;
+    color: #df3831;
     font-size: 28px;
-    letter-spacing: 2px;
+    letter-spacing: 3px;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px #fff;
 }
 
 /** Init Page ***/
@@ -108,15 +123,17 @@
     z-index: 1;
     margin-top: 6%;
     margin-left: 20%;
-    text-shadow: 3px 3px 9px #111;
+    text-shadow: 3px 3px 9px #df3831;
 }
 
 .frame {
     position:relative ;
-    width: 50%;
-    height: 50%;
-    border: 10px solid #333;
-    box-shadow: 3px 3px 9px #111;
+    /*width: 50%;
+    height: 50%;*/
+    width: 615px;
+    height: 468px;
+    border: 12px solid #df3831;
+    box-shadow: 3px 3px 9px #666;
 }
 
 .pop {
@@ -138,8 +155,19 @@
     }
 }
 
+/** 615 x 448 **/
+
 #preview-frame {
-    height: 500px;
+    /*height: 500px;*/
+    padding-top: 2px;
+    left: 5.6%;
+    box-shadow: none;
+    border: none;
+}
+
+#preview-page .frame-wrapper {
+    background: url(../images/templates/default.png) no-repeat center;
+    height: 600px;
 }
 
 #share-pane {
@@ -217,7 +245,7 @@
     left: 25%;
     text-align: center;
     top: 0%;
-    height: 80%;
+    height: 70%;
     border: 1px;
     overflow: hidden;
 

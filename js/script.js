@@ -141,6 +141,8 @@ function share(type){
 
 function preview(){
     //$canvas.style.opacity = '1';
+    //console.log(siteUrl +'images/templates/default.png');
+    $('#preview-page .frame-wrapper').css({'background': 'url('+ siteUrl +'images/templates/default.png) no-repeat center;'});
     $('#share-inp-block, #share-inp-block .inp').hide();
     ctx.drawImage($video, 0, 0, $canvas.width, $canvas.height);
     

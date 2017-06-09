@@ -9,9 +9,11 @@ include_once './header.php';
 ?>
     
     <section id="home-page" class="page">
-        <div id="start-btn" class="fade middle">
-            <i id="start-icon" class="fa fa-play"></i>
-            <span>Start</span>
+        <div id="start-btn">
+            <div id="start-icon" >
+                <i class="fa fa-camera fade"></i>
+            </div>
+            <div id="start-text">TAP TO START</div>
         </div>
         
     </section>

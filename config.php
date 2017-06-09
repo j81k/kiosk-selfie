@@ -7,7 +7,7 @@
 
 define( 'SITE_NAME', 'Selfie | Kiosk' );
 define( 'SHOT_TIMEOUT', 3 ); // in Seconds
-define( 'IDLE_TIMEOUT', 30 ); // Timeout for get back to Home screen, if not clicked on any sharing option in "preview" page.
+define( 'IDLE_TIMEOUT', 3000 ); // Timeout for get back to Home screen, if not clicked on any sharing option in "preview" page.
 define( 'UPLOAD_DIR',	__DIR__ . '/uploads/' );
 
 // Email
