@@ -225,7 +225,7 @@ function init(){
 window.onload = init;
 
 $(document).on('ready', function(){
-        show('home');
+        show('init'); //#
         
         $('#start-btn').on('click', function(){
     		show('prepare');

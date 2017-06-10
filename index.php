@@ -34,6 +34,7 @@ include_once './header.php';
     <section id="preview-page" class="page">
         <div class="frame-wrapper">
             <canvas id="preview-frame" class="frame"></canvas>    
+            <div id="preview-bottom"></div>
         </div>
 
         <div id="share-inp-block" class="middle">
@@ -46,13 +47,13 @@ include_once './header.php';
         </div>
         
         <div id="share-pane" class="pop-down">
-            <i id="share-home-btn" class="fa fa-home icon"></i>
-            <i id="share-sms-btn" class="fa fa-commenting icon"></i>
-            <i id="share-mail-btn" class="fa fa-envelope-o icon"></i>
-            <i id="share-retake-btn" class="fa fa-recycle icon"></i>
-            <i id="share-fb-btn" class="fa fa-facebook-f icon"></i>
-            <i id="share-tw-btn" class="fa fa-twitter icon"></i>
-            <i id="share-print-btn" class="fa fa-print icon"></i>
+            <img src="<?php echo SITE_URL; ?>images/retake.png" id="share-retake-btn" class="icon" />
+            <img src="<?php echo SITE_URL; ?>images/sms.png" id="share-sms-btn" class="icon" />
+            <img src="<?php echo SITE_URL; ?>images/mail.png" id="share-mail-btn" class="icon" />
+            <img src="<?php echo SITE_URL; ?>images/home.png" id="share-home-btn" class="icon" />
+            <img src="<?php echo SITE_URL; ?>images/facebook.png" id="share-fb-btn" class="icon" />
+            <img src="<?php echo SITE_URL; ?>images/twitter.png" id="share-tw-btn" class="icon" />
+            <img src="<?php echo SITE_URL; ?>images/print.png" id="share-print-btn" class="icon" />
         </div>
 
 
