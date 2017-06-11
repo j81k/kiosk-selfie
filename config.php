@@ -16,6 +16,9 @@ define('UPLOAD_DIR', 'uploads/');
 
 // Email
 define('MAIL_FROM',	'Admin<admin@kiosk.com>');
+define('MAIL_SUBJECT', 'Selfie: Photo is attched!');
+define('MAIL_TEMPLATE', 0); 
+
 
 // Twitter
 define('TWITTER_AUTHOR', 'Admin');

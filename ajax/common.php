@@ -44,8 +44,6 @@
 
 	$templatePath = $templatePath . 'img_'.$_SERVER['REMOTE_ADDR'].'_'.time().'.png'; 
 	imagepng($template, BASE_DIR . $templatePath);
-	
-
 	unlink($photoPath);
 
 
@@ -53,8 +51,24 @@
 
 		case 'mail' :
 
+			$mailTo = $data['emailTo'];
+			if (empty($mailTo) === false ) {
+				preg_match('/^(.*?)\@/', $mailTo, $mtchs); 
+				$name = Ucwords(str_replace('.', ' ', $mtchs[1]));
 
+				$body = file_get_contents(BASE_DIR . 'templates/mail/template-'.MAIL_TEMPLATE.'.php');
+				$body = preg_replace('/\{name\}/', '<b>'. $name .'</b>', $body);
+				$body = preg_replace('/\{templateImg\}/', '<img src="'.SITE_URL . $templatePath.'" />', $body);
 
+				$return = [
+					'success' => sendMail($mailTo, $template, $body)
+				];
+			}
+			else {
+				$return = ['success' => false, 'message' => 'Email To Address is empty!'];
+			}
+
+			
 		break;
 
 		case 'twitter' :
@@ -104,6 +118,44 @@ function makeDir($dir)
 		mkdir( BASE_DIR . $dir, 777, TRUE );
 		chmod( BASE_DIR . $dir, 777, TRUE );
 	endif;
+}
+
+
+function sendMail($to, $photoData, $body, $photoName = 'Photo', $subject = '', $filetype = 'image/png')
+{
+	$bound_text = md5(uniqid(rand(), true));;
+	$bound = "--" . $bound_text . "\r\n";
+	$bound_last = "--" . $bound_text . "--\r\n";
+
+	$headers = "From:" . MAIL_FROM . "\r\n"
+			 . "MIME-Version: 1.0\r\n"
+			 . "Content-Type: multipart/mixed; boundary=\"$bound_text\"";
+
+	$message =	"Sorry, your client doesn't support MIME types.\r\n"
+			 . $bound;
+
+	$message .=	"Content-Type: text/html; charset=\"iso-8859-1\"\r\n"
+			 . "Content-Transfer-Encoding: 7bit\r\n\r\n"
+			 . $body
+			 . $bound;
+
+	$file =	$photoData;//file_get_contents(BASE_DIR . $photoPath);
+
+	$message .=	"Content-Type: $filetype; name=\"$photoName\"\r\n"
+			 . "Content-Transfer-Encoding: base64\r\n"
+			 . "Content-disposition: attachment; file=\"$photoName\"\r\n"
+			 . "\r\n"
+			 . chunk_split(base64_encode($file))
+			 . $bound_last;
+
+	$subject = empty($subject) === false ? $subject : MAIL_SUBJECT;		 
+	if (mail($to, $subject, $message, $headers)) {
+	     return true;
+	} 
+	else 
+	{ 
+	    return false;
+	}
 }
 
 function pre($data) 

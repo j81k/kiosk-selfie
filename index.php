@@ -38,12 +38,12 @@ include_once './header.php';
         </div>
 
         <div id="share-inp-block" class="middle">
-            <form>
-                <input type="email" class="inp email" placeholder="email@example.com" />
-                <input type="text" class="inp contact-no" placeholder="+91xxxxxxxxxx" />
+            
+            <input type="email" class="inp email" placeholder="email@example.com" value="" />
+            <input type="text" class="inp contact-no" placeholder="+91xxxxxxxxxx" />
 
-                <button class="btn">Share</button>
-            </form>
+            <button id="share-sbmt-btn" class="btn">Share</button>
+            
         </div>
         
         <div id="share-pane" class="pop-down">

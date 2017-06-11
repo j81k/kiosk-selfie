@@ -88,9 +88,34 @@ function share(type){
             }   
         }
 
+        if (type == 'mail') {
+            var email = $('#share-inp-block .email').val() || "";
+
+            if (email == '') {
+                alert('Please enter the email address!');
+                return false;
+            }
+
+            data.data.emailTo = email;
+
+        }else if(type == "sms") {
+            var contactNo = $('#share-inp-block .contact-no').val() || "";
+
+            if (contactNo == '') {
+                alert('Please enter the mobile number!');
+                return false;
+            }
+
+            data.data.contactNo = contactNo;
+        }
+
         $.post( siteUrl + 'ajax/common.php', data, function(results){
             // Success
             results = JSON.parse(results);
+
+            if (results['message'] !== '') {
+                alert('Message: '+ results['message']);
+            } 
 
             if (type == 'twitter') {
                 var win = window.open('https://twitter.com/intent/tweet?url='+ siteUrl + results['metaPath'] +'&text='+ results['title'] +'&hashtags='+ results['tags'] +'&via='+ results['via'],  '', 'menubar=no, location=no, resizable=no, scrollbars=no, status=no');
@@ -138,8 +163,6 @@ function share(type){
 
         }
     }
-
-
     
 }
 
@@ -195,8 +218,6 @@ function show(page){
         case 'preview' :
             
             preview();
-            
-                
         break;
 		
 	}
@@ -212,6 +233,7 @@ function resetShare(){
     $('#share-pane .icon.active').removeClass('active');
     $('#preview-page').removeAttr('data-submit');
     $('#share-inp-block, #share-inp-block .inp').hide();
+    $('.email, .contact-no').val('mail.j81k@gmail.com');
 }
 
 
@@ -230,14 +252,18 @@ $(document).on('ready', function(){
     		show('prepare');
     	});
         
-        $('#share-pane .icon').on('click', function(){
+        $('#share-pane .icon, #share-sbmt-btn').on('click', function(){
             var id = $(this).attr('id');
-            resetShare();
-            $(this).addClass('active');
-            
 
-            //$canvas.style.opacity = '0';
-            
+            if (id == 'share-sbmt-btn') {
+                id = $('#share-pane .icon.active').attr('id');
+
+                $('#preview-page').attr('data-submit', true);
+            }else {
+                resetShare();
+                $(this).addClass('active');
+            }
+
             switch(id) {
                 
                 case 'share-retake-btn' :
