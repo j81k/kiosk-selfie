@@ -77,7 +77,7 @@ function share(type){
     var isSubmit = $('#preview-page').attr('data-submit') ? true : false
     ,   imgURL = $canvas.toDataURL('image/png');
 
-    if( isSubmit ) {
+    if( isSubmit || type == 'facebook' || type == 'twitter' ) {
         // Send Ajax
         $('#preview-page').removeAttr('data-submit');
     
@@ -90,14 +90,20 @@ function share(type){
 
         $.post( siteUrl + 'ajax/common.php', data, function(results){
             // Success
+            results = JSON.parse(results);
+
+            if (type == 'twitter') {
+                var win = window.open('https://twitter.com/intent/tweet?url='+ siteUrl + results['metaPath'] +'&text='+ results['title'] +'&hashtags='+ results['tags'] +'&via='+ results['via'],  '', 'menubar=no, location=no, resizable=no, scrollbars=no, status=no');
+                //var win = window.open('https://twitter.com/intent/tweet?url=http%3A%2F%2Fapp.sourceplate.com%2Fworkout%2F&text='+ results['title'] + '&hashtags='+ results['tags'] +'&via='+ results['via'],  '', 'menubar=no, location=no, resizable=no, scrollbars=no, status=no');
+            }
+
         });
 
     }else {
 
         // Show Popup to get user input
         $('#preview-page').attr('data-submit', type);
-        $('#share-inp-block, #share-inp-block .inp').hide();
-
+        
         switch(type) {
             
             case 'mail' :
@@ -114,8 +120,6 @@ function share(type){
             break;
 
             default :
-
-
 
                 $('#load-frame').remove();
                 $('#preview-page').append('<iframe id="load-frame" class="frame" frameborder="0" allowfullscreen ></iframe>');
@@ -140,12 +144,11 @@ function share(type){
 }
 
 function preview(){
-    //$canvas.style.opacity = '1';
-    //console.log(siteUrl +'images/templates/default.png');
     $('#preview-page .frame-wrapper').css({'background': 'url('+ siteUrl +'images/templates/default.png) no-repeat center;'});
     $('#share-inp-block, #share-inp-block .inp').hide();
     ctx.drawImage($video, 0, 0, $canvas.width, $canvas.height);
-    
+    streamObj.getVideoTracks()[0].stop();
+
     $('#share-pane').addClass('pop');
     setTimeout(function(){
         $('#share-pane').removeClass('pop-down');
@@ -160,12 +163,8 @@ function preview(){
 }
 
 function show(page){
+    $('.page.active').fadeOut('slow').removeClass('active');
 
-
-	page = typeof page == 'undefined' ? 'home' : page;
-	$('.page.active').fadeOut('slow').removeClass('active');
-
-	//console.log('Showing: '+page);
 	switch(page) {
 
 		default:
@@ -196,7 +195,7 @@ function show(page){
         case 'preview' :
             
             preview();
-            streamObj.getVideoTracks()[0].stop();
+            
                 
         break;
 		
@@ -264,12 +263,12 @@ $(document).on('ready', function(){
 
                 case 'share-fb-btn' :
 
-                    share('fb');
+                    share('facebook');
                 break;
 
                 case 'share-tw-btn' :
 
-                    share('tw');
+                    share('twitter');
                 break;
                 
                 default :
