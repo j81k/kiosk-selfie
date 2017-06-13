@@ -167,9 +167,20 @@ function share(type){
 }
 
 function preview(){
-    $('#preview-page .frame-wrapper').css({'background': 'url('+ siteUrl +'images/templates/default.png) no-repeat center;'});
+    //$('#preview-page .frame-wrapper').css({'background': 'url('+ siteUrl +'images/templates/default.png) no-repeat center;'});
     $('#share-inp-block, #share-inp-block .inp').hide();
-    ctx.drawImage($video, 0, 0, $canvas.width, $canvas.height);
+
+    var ratio = $video.videoWidth / $video.videoHeight;
+    // Define the required width as 100 pixels smaller than the actual video's width
+    var w = $video.videoWidth - 100;
+    // Calculate the height based on the video's width and the ratio
+    var h = parseInt(w / ratio, 10);
+    // Set the canvas width and height to the values just calculated
+    $canvas.width = w;
+    $canvas.height = h;  
+
+    //$video.pause();
+    ctx.drawImage($video, 0, 0, w, h);
     streamObj.getVideoTracks()[0].stop();
 
     $('#share-pane').addClass('pop');
@@ -246,7 +257,7 @@ function init(){
 window.onload = init;
 
 $(document).on('ready', function(){
-        show('home'); //#
+        show('init'); //#
         
         $('#start-btn').on('click', function(){
     		show('prepare');
