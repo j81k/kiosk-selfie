@@ -21,7 +21,7 @@ navigator.getUserMedia = (
 function initTimer(){
 
 	window.clearInterval(timer);
-    $('#timer').html('');//.fadeIn('slow');
+    $('#timer').html('');
 
 	var i = timerOut;
 	timer = window.setInterval(function(){
@@ -119,7 +119,6 @@ function share(type){
 
             if (type == 'twitter') {
                 var win = window.open('https://twitter.com/intent/tweet?url='+ siteUrl + results['metaPath'] +'&text='+ results['title'] +'&hashtags='+ results['tags'] +'&via='+ results['via'],  '', 'menubar=no, location=no, resizable=no, scrollbars=no, status=no');
-                //var win = window.open('https://twitter.com/intent/tweet?url=http%3A%2F%2Fapp.sourceplate.com%2Fworkout%2F&text='+ results['title'] + '&hashtags='+ results['tags'] +'&via='+ results['via'],  '', 'menubar=no, location=no, resizable=no, scrollbars=no, status=no');
             }
 
         });
@@ -170,10 +169,10 @@ function preview(){
     //$('#preview-page .frame-wrapper').css({'background': 'url('+ siteUrl +'images/templates/default.png) no-repeat center;'});
     $('#share-inp-block, #share-inp-block .inp').hide();
 
-    var ratio = $video.videoWidth / $video.videoHeight;
-    var w = $video.videoWidth - 100;
-    var h = parseInt(w / ratio, 10);
-    $canvas.width = w;
+    var ratio = $video.videoWidth / $video.videoHeight; // 640 x 480 = 1.333333333
+    var w = $video.videoWidth - 35;                     
+    var h = parseInt(w / ratio, 10);                    
+    $canvas.width = w+6;
     $canvas.height = h;  
 
     //$video.pause();
@@ -204,23 +203,20 @@ function show(page){
 			// Home 
 			page = 'home';
             $('#share-pane .icon.active').removeClass('active');
-
         break;
             
-            
 		case 'prepare' :
+
 			// Prepare to init
 			setTimeout(function(){
 				show('init');
 			}, 4000);	
-		
 		break;	
 
 		case 'init' :
 			
 			// Init Snapshot
 			openCamera();
-			
 		break;
             
         case 'preview' :
@@ -241,7 +237,7 @@ function resetShare(){
     $('#share-pane .icon.active').removeClass('active');
     $('#preview-page').removeAttr('data-submit');
     $('#share-inp-block, #share-inp-block .inp').hide();
-    $('.email, .contact-no').val('mail.j81k@gmail.com');
+    $('.email, .contact-no').val('');
 }
 
 
@@ -254,7 +250,7 @@ function init(){
 window.onload = init;
 
 $(document).on('ready', function(){
-        show('init'); //#
+        show('home'); 
         
         $('#start-btn').on('click', function(){
     		show('prepare');
@@ -282,7 +278,6 @@ $(document).on('ready', function(){
                 case 'share-print-btn' :
 
                     share('print');
-
                 break;
 
                 case 'share-mail-btn' :
@@ -306,6 +301,7 @@ $(document).on('ready', function(){
                 break;
                 
                 default :
+
                     show('home');
                 break;    
                 

@@ -21,7 +21,7 @@ body {
 
 .middle {
     top: 45%;
-    left: 40%;
+    left: 45%;
     position: absolute;
     text-align: center;
     
@@ -124,8 +124,8 @@ body {
     font-size: 300px;
     position:absolute ;
     z-index: 1;
-    margin-top: 6%;
-    margin-left: 20%;
+    margin-top: 10%;
+    margin-left: 25%;
     text-shadow: 3px 3px 9px #df3831;
 }
 

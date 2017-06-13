@@ -1,7 +1,5 @@
 <?php
 
-
-
 # Functions
 # -------------------------
 
@@ -31,7 +29,7 @@ function sendMail($to, $photoData, $body, $photoName = 'Photo', $subject = '', $
 			 . $body
 			 . $bound;
 
-	$file =	$photoData;//file_get_contents(BASE_DIR . $photoPath);
+	$file =	$photoData;
 
 	$message .=	"Content-Type: $filetype; name=\"$photoName\"\r\n"
 			 . "Content-Transfer-Encoding: base64\r\n"
