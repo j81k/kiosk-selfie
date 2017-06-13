@@ -4,16 +4,16 @@
 	* Created On: 2017-05-30 15:58 
 	*/
 
-	include_once '../config.php';
-
 	$action = $_POST['action'];
 	$data   = $_POST['data'];
 
-	$imgData = base64_decode( str_replace(' ', '+', str_replace('data:image/png;base64,' , '', $data['img'] ) ) );
+	$imgData = base64_decode(str_replace(' ', '+', str_replace('data:image/png;base64,' , '', $data['img'])));
 
-	if( empty( $imgData ) ) 
+	if (empty($imgData)) 
 		die('Image data is empty!');
 
+	include_once '../config.php';
+	include_once '../functions.php';
 
 	$templatePath = UPLOAD_DIR.'templates/';
 	makeDir($templatePath);	
@@ -48,6 +48,23 @@
 
 
 	switch( $action ) :
+
+		case 'sms' :
+
+			$mobileNo = $data['contactNo'];
+			$message = 'Happy Birthday ...' . tinyurl(SITE_URL . $templatePath);
+
+			if (empty($mobileNo) === false) {
+				$output = sendSms($mobileNo, $message);
+				if (!is_numeric($output)) {
+					// Error	
+					$return = ['success' => false, 'message' => 'SMS is not sent!' . "\r\n" . (empty($output) === false ? $output : 'Oops: something went wrong.')];
+				}	
+			}else {
+				$return = ['success' => false, 'message' => 'Mobile Number is empty!'];
+			}
+			
+		break;
 
 		case 'mail' :
 
@@ -107,58 +124,3 @@
 
 	echo json_encode($return);
 	
-
-
-# Functions
-# -------------------------
-function makeDir($dir)
-{
-
-	if( !file_exists($dir) ) :
-		mkdir( BASE_DIR . $dir, 777, TRUE );
-		chmod( BASE_DIR . $dir, 777, TRUE );
-	endif;
-}
-
-
-function sendMail($to, $photoData, $body, $photoName = 'Photo', $subject = '', $filetype = 'image/png')
-{
-	$bound_text = md5(uniqid(rand(), true));;
-	$bound = "--" . $bound_text . "\r\n";
-	$bound_last = "--" . $bound_text . "--\r\n";
-
-	$headers = "From:" . MAIL_FROM . "\r\n"
-			 . "MIME-Version: 1.0\r\n"
-			 . "Content-Type: multipart/mixed; boundary=\"$bound_text\"";
-
-	$message =	"Sorry, your client doesn't support MIME types.\r\n"
-			 . $bound;
-
-	$message .=	"Content-Type: text/html; charset=\"iso-8859-1\"\r\n"
-			 . "Content-Transfer-Encoding: 7bit\r\n\r\n"
-			 . $body
-			 . $bound;
-
-	$file =	$photoData;//file_get_contents(BASE_DIR . $photoPath);
-
-	$message .=	"Content-Type: $filetype; name=\"$photoName\"\r\n"
-			 . "Content-Transfer-Encoding: base64\r\n"
-			 . "Content-disposition: attachment; file=\"$photoName\"\r\n"
-			 . "\r\n"
-			 . chunk_split(base64_encode($file))
-			 . $bound_last;
-
-	$subject = empty($subject) === false ? $subject : MAIL_SUBJECT;		 
-	if (mail($to, $subject, $message, $headers)) {
-	     return true;
-	} 
-	else 
-	{ 
-	    return false;
-	}
-}
-
-function pre($data) 
-{
-	echo '<pre>Data: '; print_r($data); die;
-}

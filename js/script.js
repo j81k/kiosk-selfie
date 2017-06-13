@@ -113,7 +113,7 @@ function share(type){
             // Success
             results = JSON.parse(results);
 
-            if (results['message'] !== '') {
+            if (typeof results['message'] != 'undefined') {
                 alert('Message: '+ results['message']);
             } 
 
@@ -171,11 +171,8 @@ function preview(){
     $('#share-inp-block, #share-inp-block .inp').hide();
 
     var ratio = $video.videoWidth / $video.videoHeight;
-    // Define the required width as 100 pixels smaller than the actual video's width
     var w = $video.videoWidth - 100;
-    // Calculate the height based on the video's width and the ratio
     var h = parseInt(w / ratio, 10);
-    // Set the canvas width and height to the values just calculated
     $canvas.width = w;
     $canvas.height = h;  
 

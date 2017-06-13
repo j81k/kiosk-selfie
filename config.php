@@ -6,7 +6,6 @@
  */
 
 //phpinfo(); die;
-
 error_reporting(E_ERROR);
 define('SITE_NAME', 'Selfie');
 define('SHOT_TIMEOUT', 1); // in Seconds
@@ -18,6 +17,10 @@ define('UPLOAD_DIR', 'uploads/');
 define('MAIL_FROM',	'Admin<admin@kiosk.com>');
 define('MAIL_SUBJECT', 'Selfie: Photo is attached!');
 define('MAIL_TEMPLATE', 0); 
+
+// SMS
+define('SMS_GATEWAY_URL', 'http://sms.glg.co.in/sendsms?uname=atkochennai&pwd=atkochennai&senderid=ATKOWS&route=T');
+define('MOBILE_NO_PREFIX', '+91');
 
 
 // Twitter

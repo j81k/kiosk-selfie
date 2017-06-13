@@ -40,7 +40,7 @@ include_once './header.php';
         <div id="share-inp-block" class="middle">
             
             <input type="email" class="inp email" placeholder="email@example.com" value="" />
-            <input type="text" class="inp contact-no" placeholder="+91xxxxxxxxxx" />
+            <input type="text" class="inp contact-no" placeholder="xxxxxxxxxx" />
 
             <button id="share-sbmt-btn" class="btn">Share</button>
             
