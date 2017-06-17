@@ -5,6 +5,7 @@
 
 body {
     background: url(../images/bg.png);
+    overflow: hidden;
 }
 
 /*.bg-home {
@@ -240,10 +241,10 @@ video {
 
 #share-inp-block {
     display: none;
-    padding: 15px;
-    background: rgba(0, 0, 0, 0.3);
+    padding: 15px 0px;
+    background: rgba(0, 0, 0, 0.1);
     box-shadow: 1px 1px 3px #111;
-    margin-left: -7%;
+    margin-left: -12%;
     margin-top: -5%;
     width: 40%;
     text-align: center;
@@ -259,6 +260,7 @@ video {
     font-size: 15px;
     width: 68%;
     text-align: center;
+    text-transform: lowercase;
 
 }
 
@@ -277,4 +279,89 @@ video {
     border: 1px;
     overflow: hidden;
 
+}
+
+
+/** Virtual Keyboard **/
+.slide-up {
+    top: 55% !important;
+    opacity: 1 !important;
+    filter: alpha(opacity=100);
+
+}
+
+
+#virtual-keyboard {
+  width: 102%;
+  margin-left: -1%;
+  padding: 5px 0px;
+  box-shadow: 1px -3px 30px #333;
+  background: rgba(150,150,150,0.7);
+  z-index: 999;
+  
+  opacity: 0;
+  filter: alpha(opacity=1);
+  position: fixed;
+  -webkit-transition: all .5s ease-in;
+  -moz-transition: all .5s ease-in;
+  -ms-transition: all .5s ease-in;
+  -o-transition: all .5s ease-in;
+  transition: all .5s ease-in; 
+
+  top: 100%;
+}
+
+#virtual-keyboard .row {
+  text-align: center;
+  margin: 5px;
+} 
+
+
+#virtual-keyboard .key {
+  display: inline-block;
+  color: #fff;
+  margin: 0px 2px;
+  padding: 10px;
+  min-width: 60px;
+  font-size: 40px;
+  line-height: 40px;
+  font-family: sans-serif;
+  border-radius: 2px;
+  cursor: pointer;
+  box-shadow: 1px 1px 3px #333;
+  text-shadow: 1px 1px 3px #666;
+}
+
+#virtual-keyboard .key:hover {
+    opacity: 0.8;
+}
+
+#virtual-keyboard .row:last-child .key {
+    font-size: 16px;
+    letter-spacing: 2px;
+    padding: 10px;
+}
+
+#key-space{
+    min-width: 25% !important;
+}
+
+#virtual-keyboard .header {
+    padding: 5px;
+}
+
+#virtual-keyboard .close-btn {
+    font-size: 40px;
+    color: #f33;
+    position: absolute;
+    right: 3%;
+    z-index: 999;
+    cursor: pointer;
+}
+
+#inp-clr-btn {
+    position: absolute;
+    margin-left: -35px;
+    margin-top: 15px;
+    font-size: 25px;
 }

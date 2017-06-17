@@ -32,6 +32,7 @@ require_once './config.php';
             var siteUrl     = '<?php echo SITE_URL; ?>';
             var timerOut    = <?php echo SHOT_TIMEOUT; ?>;
             var idleTimeout = <?php echo IDLE_TIMEOUT; ?>;
+            var keybrdClr   = '<?php echo KEYBOARD_CLR; ?>';
         </script>
         
     </head>

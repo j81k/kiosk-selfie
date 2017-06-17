@@ -10,12 +10,88 @@ var timer = null
 ,   $iframe = null; 
 
 timerOut = typeof timerOut == 'undefined' ? 3 : timerOut;
+keybrdClr = typeof keybrdClr == 'undefined' || keybrdClr == '' ? '#333' : keybrdClr; 
+
 navigator.getUserMedia = (
     navigator.getUserMedia ||
     navigator.webkitGetUserMedia ||
     navigator.mozGetUserMedia ||
     navigator.msGetUserMedia
 );
+
+function virtualKeyboard(toShow)
+{
+    
+    if ($('#virtual-keyboard').length == 0) {
+      
+        var html = '' 
+        ,   keys = [
+            // Row 1
+            ['@', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '.'],
+
+            // Row 2
+            ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
+
+            // Row 3
+            ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'],
+
+            // Row 4
+            ['.com', '.in', 'Z', 'X', 'C', '&nbsp;', 'V', 'B', 'N', 'M', '.co.in'],
+
+            // Row 5
+            ['@gmail.com', '@yahoo.in', '@yahoo.co.in', '@yahoo.com', '@outlook.com', '@zoho.com', '@aim.com', '@gmx.com'],
+
+        ];
+
+        html += '<div id="virtual-keyboard" class="slide-up">'
+            +      '<div class="header">'
+            +          '<i class="fa fa-times-circle close-btn" style="color: '+ keybrdClr +'"></i>'
+            +      '</div>'
+            +      '<div class="content">';
+
+        for (var i in keys) {
+            var row = keys[i];
+            html += '<div class="row">';
+
+            for (var k in row) {
+
+                html += '<div class="key" style="background: '+ keybrdClr +'" id="key-'+ (row[k] == '&nbsp;' ? 'space' : row[k]) +'">'+ row[k] +'</div>';
+            }
+
+            html += '</div>';
+        }
+
+        html += '</div></div>';
+
+        $('body').append(html);
+
+        $('#virtual-keyboard .key').on('click', function(){
+            var id = $(this).attr('id')
+            ,   s  = id.split('-');
+
+            $('input.active').val($('input.active').val()+(s[1] == 'space' ? ' ' : s[1]));
+
+            if ($('#inp-clr-btn').length == 0){
+                $('input.active').after('<i class="fa fa-times-circle" id="inp-clr-btn" style="color: '+ keybrdClr +'"></i>');
+            }
+
+        });
+
+        $('#virtual-keyboard .close-btn').on('click', function(){
+            virtualKeyboard(false);                    
+            $('input.active').removeClass('active');
+        });
+
+    }
+
+    if (toShow) {  
+        $('#virtual-keyboard').addClass('slide-up');
+
+    }else {
+        $('#virtual-keyboard').removeClass('slide-up');
+    }
+
+}
 
 
 function initTimer(){
@@ -180,6 +256,7 @@ function preview(){
     streamObj.getVideoTracks()[0].stop();
 
     $('#share-pane').addClass('pop');
+    virtualKeyboard();
     setTimeout(function(){
         $('#share-pane').removeClass('pop-down');
 
@@ -250,8 +327,19 @@ function init(){
 window.onload = init;
 
 $(document).on('ready', function(){
-        show('home'); 
-        
+        show('init'); //# 
+
+        $(document).on('click', '#inp-clr-btn', function(){
+            $('input.active').val('').focus();
+            $(this).remove();
+        });
+
+        $('input').on('focus', function(){
+            $('input.active').removeClass('active');
+            $(this).addClass('active');
+            virtualKeyboard(true);                    
+        });
+
         $('#start-btn').on('click', function(){
     		show('prepare');
     	});
