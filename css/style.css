@@ -144,23 +144,11 @@ video {
 }
 
 .pop {
-    animation-name: pop;
-    animation-delay: 5s;
-    animation-duration: 5s;
-    
+    opacity: 1 !important;
+    top: 88% !important;
 }
 
-.pop-down {
-    margin-bottom: -150px;
-}
 
-@keyframes pop {
-    
-    100% {
-        margin-bottom: 0px;
-        
-    }
-}
 
 /** 615 x 448 **/
 
@@ -177,67 +165,63 @@ video {
     height: 600px;
 }
 
-#preview-bottom {
-    background: url(../images/bottom-cloud.png) repeat-x 90% 10%;
-    height: 230px;
-    width: 101%;
-    position: fixed;
-    bottom: 0;
-    margin-left: -1%;
-}
+/** Dock **/
 
-#share-pane {
+#dock-container {
+    width: 100%;
     position: fixed;
     bottom: 0;
-    min-height: 105px;
     text-align: center;
-    width: 101%;
-    z-index: 9;
-    margin-left: -1%;
-    background: none;
 }
 
-#share-pane .icon {
-    margin: 10px 10px 2px 10px;
-    border-right: 3px dashed #999;
-    padding: 10px 20px 2px 20px;
-    padding-right: 33px;
-    cursor: pointer;
-    width: 85px;
-    
+#dock ul{
+    list-style: none;
+    position: absolute;
+    width: 100%;
+    padding: 0;
+    margin-top: 0px;
 }
 
-#share-pane .icon:last-child {
-    border: none;
+#dock li {
+    display: inline-block;
+    margin: 5px 20px;
 }
 
-#share-retake-btn {
-   
+#dock li img {
+    width: 64px;
+    height: 64px;
+    -webkit-box-reflect: below 2px
+    -webkit-gradient(linear, left top, left bottom, from(transparent),
+    color-stop(0.7, transparent), to(rgba(255,255,255,.5))); /* reflection is supported by webkit only */
+    -webkit-transition: all 0.3s;
+    -webkit-transform-origin: 50% 100%;
 }
 
-#share-fb-btn {
-  
+#dock li:hover img { 
+    -webkit-transform: scale(1.2);
+    /*margin: 0 2em;*/
 }
 
-#share-tw-btn {
+#dock li:hover + li img,
+#dock li.prev img {
+    -webkit-transform: scale(1);
+    /*margin: 0 2em;*/
+}
+
+#dock-container .base {
+    width: 60%;
+    margin: 0 auto;
+    min-height: 120px;
+    background: linear-gradient(rgba(155,155,155,0.7), #fff, rgba(255,255,255,0.7));
+    border-top-right-radius: 100px;
+    border-top-left-radius: 100px;
+    /*transform: rotate(4deg);*/
+    box-shadow: 3px 2px 12px #333;
 
 }
 
-#share-mail-btn {
-   
-}
+/** Dock END **/
 
-#share-sms-btn {
-   
-}
-
-#share-home-btn {
-     width: 120px !important;
-}
-
-#share-print-btn {
- 
-}
 
 #share-inp-block {
     display: none;
@@ -287,7 +271,19 @@ video {
     top: 56% !important;
     opacity: 1 !important;
     filter: alpha(opacity=100);
+}
 
+.easy-up {
+    opacity: 0;
+    filter: alpha(opacity=1);
+    position: fixed;
+    -webkit-transition: all .5s ease-in;
+    -moz-transition: all .5s ease-in;
+    -ms-transition: all .5s ease-in;
+    -o-transition: all .5s ease-in;
+    transition: all .5s ease-in; 
+
+    top: 100%;
 }
 
 
@@ -299,16 +295,6 @@ video {
   background: rgba(150,150,150,0.7);
   z-index: 999;
   
-  opacity: 0;
-  filter: alpha(opacity=1);
-  position: fixed;
-  -webkit-transition: all .5s ease-in;
-  -moz-transition: all .5s ease-in;
-  -ms-transition: all .5s ease-in;
-  -o-transition: all .5s ease-in;
-  transition: all .5s ease-in; 
-
-  top: 100%;
 }
 
 #virtual-keyboard .row {
@@ -351,7 +337,7 @@ video {
     color: #f33;
     position: absolute;
     right: 5%;
-    margin-top: 20px;
+    margin-top: 16px;
     z-index: 999;
     cursor: pointer;
 }

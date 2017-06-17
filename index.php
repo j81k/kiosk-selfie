@@ -34,7 +34,6 @@ include_once './header.php';
     <section id="preview-page" class="page">
         <div class="frame-wrapper">
             <canvas id="preview-frame" class="frame"></canvas>    
-            <div id="preview-bottom"></div>
         </div>
 
         <div id="share-inp-block" class="middle">
@@ -45,19 +44,22 @@ include_once './header.php';
             <button id="share-sbmt-btn" class="btn">Share</button>
             
         </div>
-        
-        <div id="share-pane" class="pop-down">
-            <img src="<?php echo SITE_URL; ?>images/retake.png" id="share-retake-btn" class="icon" />
-            <img src="<?php echo SITE_URL; ?>images/sms.png" id="share-sms-btn" class="icon" />
-            <img src="<?php echo SITE_URL; ?>images/mail.png" id="share-mail-btn" class="icon" />
-            <img src="<?php echo SITE_URL; ?>images/home.png" id="share-home-btn" class="icon" />
-            <img src="<?php echo SITE_URL; ?>images/facebook.png" id="share-fb-btn" class="icon" />
-            <img src="<?php echo SITE_URL; ?>images/twitter.png" id="share-tw-btn" class="icon" />
-            <img src="<?php echo SITE_URL; ?>images/print.png" id="share-print-btn" class="icon" />
+
+        <div id="dock-container" class="easy-up">
+            <div id="dock">
+                <ul>
+                    <li><img src="<?php echo SITE_URL; ?>images/retake.png" id="share-retake-btn" class="icon" /></li>
+                    <li><img src="<?php echo SITE_URL; ?>images/sms.png" id="share-sms-btn" class="icon" /></li>
+                    <li><img src="<?php echo SITE_URL; ?>images/home.png" id="share-home-btn" class="icon" /></li>
+                    <li><img src="<?php echo SITE_URL; ?>images/mail.png" id="share-mail-btn" class="icon" /></li>
+                    <!-- <li><img src="<?php echo SITE_URL; ?>images/facebook.png" id="share-fb-btn" class="icon" /></li>
+                    <li><img src="<?php echo SITE_URL; ?>images/twitter.png" id="share-tw-btn" class="icon" /></li> -->
+                    <li><img src="<?php echo SITE_URL; ?>images/print.png" id="share-print-btn" class="icon" /></li>
+                </ul>
+                <div class="base"></div>
+            </div>
         </div>
-
-
-
+        
     </section>
 
 

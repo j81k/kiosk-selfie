@@ -36,14 +36,14 @@ function virtualKeyboard(toShow)
             ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'],
 
             // Row 4
-            ['.com', '.in', 'Z', 'X', 'C', '&nbsp;', 'V', 'B', 'N', 'M', '.co.in'],
+            ['.com', '.in', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', '.co.in'], // '&nbsp;',
 
             // Row 5
             ['@gmail.com', '@yahoo.in', '@yahoo.co.in', '@yahoo.com', '@outlook.com', '@zoho.com', '@aim.com', '@gmx.com'],
 
         ];
 
-        html += '<div id="virtual-keyboard" class="slide-up">'
+        html += '<div id="virtual-keyboard" class="slide-up easy-up">'
             +      '<div class="header">'
             +          '<i class="fa fa-times-circle close-btn" style="color: '+ keybrdClr +'"></i>'
             +      '</div>'
@@ -257,7 +257,6 @@ function share(type){
 }
 
 function preview(){
-    //$('#preview-page .frame-wrapper').css({'background': 'url('+ siteUrl +'images/templates/default.png) no-repeat center;'});
     $('#share-inp-block, #share-inp-block .inp').hide();
 
     var ratio = $video.videoWidth / $video.videoHeight; // 640 x 480 = 1.333333333
@@ -269,16 +268,14 @@ function preview(){
     //$video.pause();
     ctx.drawImage($video, 0, 0, w, h);
     streamObj.getVideoTracks()[0].stop();
-
-    $('#share-pane').addClass('pop');
     virtualKeyboard();
-    setTimeout(function(){
-        $('#share-pane').removeClass('pop-down');
 
+    setTimeout(function(){
+        $('#dock-container').addClass('pop');
     }, 1500);
-        
+    
     timer = window.setTimeout(function(){
-        if( $('#share-pane .icon.active').length == 0 ) {
+        if( $('#dock-container .icon.active').length == 0 ) {
             show('home');
         }
     }, idleTimeout*1000);
@@ -286,6 +283,7 @@ function preview(){
 
 function show(page){
     $('.page.active').fadeOut('slow').removeClass('active');
+    $('#dock-container').removeClass('pop');
 
 	switch(page) {
 
@@ -294,7 +292,7 @@ function show(page){
 
 			// Home 
 			page = 'home';
-            $('#share-pane .icon.active').removeClass('active');
+            $('#dock-container .icon.active').removeClass('active');
         break;
             
 		case 'prepare' :
@@ -326,7 +324,7 @@ function show(page){
 
 function resetShare(){
     $('#load-frame').remove();
-    $('#share-pane .icon.active').removeClass('active');
+    $('#dock-container .icon.active').removeClass('active');
     $('#preview-page').removeAttr('data-submit');
     $('#share-inp-block, #share-inp-block .inp').hide();
     $('.email, .contact-no').val('');
@@ -359,11 +357,11 @@ $(document).on('ready', function(){
     		show('prepare');
     	});
         
-        $('#share-pane .icon, #share-sbmt-btn').on('click', function(){
+        $('#dock-container .icon, #share-sbmt-btn').on('click', function(){
             var id = $(this).attr('id');
 
             if (id == 'share-sbmt-btn') {
-                id = $('#share-pane .icon.active').attr('id');
+                id = $('#dock-container .icon.active').attr('id');
 
                 $('#preview-page').attr('data-submit', true);
             }else {
