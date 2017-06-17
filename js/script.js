@@ -327,7 +327,7 @@ function init(){
 window.onload = init;
 
 $(document).on('ready', function(){
-        show('init'); //# 
+        show('home'); //# 
 
         $(document).on('click', '#inp-clr-btn', function(){
             $('input.active').val('').focus();

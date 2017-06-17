@@ -8,8 +8,8 @@
 //phpinfo(); die;
 error_reporting(E_ERROR);
 define('SITE_NAME', 'Selfie');
-define('SHOT_TIMEOUT', 1); // in Seconds
-define('IDLE_TIMEOUT', 3000); // Timeout for get back to Home screen, if not clicked on any sharing option in "preview" page.
+define('SHOT_TIMEOUT', 3); // in Seconds
+define('IDLE_TIMEOUT', 30); // Timeout for get back to Home screen, if not clicked on any sharing option in "preview" page.
 define('KEYBOARD_CLR', '#333');
 define('BASE_DIR', __DIR__ . '/');
 define('UPLOAD_DIR', 'uploads/');
