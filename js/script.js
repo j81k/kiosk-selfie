@@ -55,7 +55,7 @@ function virtualKeyboard(toShow)
 
             for (var k in row) {
 
-                html += '<div class="key" style="background: '+ keybrdClr +'" id="key-'+ (row[k] == '&nbsp;' ? 'space' : row[k]) +'">'+ row[k] +'</div>';
+                html += '<div class="key '+ (isNaN(row[k]) ? (row[k][0] == '@' ? 'mail-char' : (row[k] == '.' ? 'dot' : 'char')) : 'digit') +'" style="background: '+ keybrdClr +'" id="key-'+ (row[k] == '&nbsp;' ? 'space' : row[k]) +'">'+ row[k] +'</div>';
             }
 
             html += '</div>';
@@ -67,11 +67,20 @@ function virtualKeyboard(toShow)
 
         $('#virtual-keyboard .key').on('click', function(){
             var id = $(this).attr('id')
-            ,   s  = id.split('-');
+            ,   s  = id.split('-')
+            ,   value = $('input.active').val()+(s[1] == 'space' ? ' ' : s[1]);
 
-            $('input.active').val($('input.active').val()+(s[1] == 'space' ? ' ' : s[1]));
+            if ($('input.active').hasClass('contact-no')) {
+                value = value.substring(value.length-10, 11);
 
-            if ($('#inp-clr-btn').length == 0){
+                if (parseInt(value) == 0) {
+                    value = '';
+                }
+            }
+
+            $('input.active').val(value).focus();
+
+            if ($('#inp-clr-btn').length == 0 && value != ''){
                 $('input.active').after('<i class="fa fa-times-circle" id="inp-clr-btn" style="color: '+ keybrdClr +'"></i>');
             }
 
@@ -84,7 +93,13 @@ function virtualKeyboard(toShow)
 
     }
 
-    if (toShow) {  
+    if (toShow) { 
+        if ($('input.active').hasClass('contact-no')) {
+            $('#virtual-keyboard .key').not('.key.digit').hide();
+        }else {
+            $('#virtual-keyboard .key').show();
+        }
+
         $('#virtual-keyboard').addClass('slide-up');
 
     }else {
