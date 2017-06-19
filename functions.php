@@ -63,7 +63,7 @@ function makeDir($dir)
 	endif;
 }
 
-function curl($url)
+function curl($url, $data = [])
 {
 
 	if (empty($url) === false) {
@@ -73,6 +73,12 @@ function curl($url)
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+
+		if (empty($data) === false) {
+			curl_setopt($ch, CURLOPT_HEADER, false);
+			curl_setopt($ch, CURLOPT_POST, 1);
+			curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+		}
 		
 		$return = curl_exec($ch);
 

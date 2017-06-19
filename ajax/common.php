@@ -71,14 +71,34 @@
 			$mailTo = $data['emailTo'];
 			if (empty($mailTo) === false ) {
 				preg_match('/^(.*?)\@/', $mailTo, $mtchs); 
-				$name = Ucwords(str_replace('.', ' ', $mtchs[1]));
+				$name = ucwords(str_replace('.', ' ', $mtchs[1]));
 
-				$body = file_get_contents(BASE_DIR . 'templates/mail/template-'.MAIL_TEMPLATE.'.php');
+				$body = file_get_contents(BASE_DIR . 'templates/mail/template-' . MAIL_TEMPLATE . '.php');
 				$body = preg_replace('/\{name\}/', '<b>'. $name .'</b>', $body);
-				$body = preg_replace('/\{templateImg\}/', '<img src="'.SITE_URL . $templatePath.'" />', $body);
+				$body = preg_replace('/\{templateImg\}/', '<img src="'. SITE_URL . $templatePath.'" />', $body);
 
+				if (empty(ALT_SERVER) === false) {
+					$data = [
+						'action'	=> $action,
+						'mailTo'	=> $mailTo,
+						'body'		=> $body,
+						'template'	=> base64_encode($template),
+						'templatePath' => SITE_URL . $templatePath,
+
+						'MAIL_FROM'	=> MAIL_FROM,
+						'MAIL_SUBJECT' => MAIL_SUBJECT,
+					];
+
+					//pre($data);
+
+					$return = curl(ALT_SERVER, $data);	
+				} else {
+					// Sent from Local	
+					$return = sendMail($mailTo, $template, $body);
+				}
+				
 				$return = [
-					'success' => sendMail($mailTo, $template, $body)
+					'success' => $return
 				];
 			}
 			else {
