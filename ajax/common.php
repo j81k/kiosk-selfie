@@ -46,7 +46,8 @@
 	$templatePath = $templatePath . 'img_'.$_SERVER['REMOTE_ADDR'].'_'.time().'.png'; 
 	imagepng($template, BASE_DIR . $templatePath);
 
-	$templateUrl = $isAltServer ? (dirname(ALT_SERVER) . '/' : SITE_URL) . $templatePath;
+	$templateUrl = ($isAltServer ? dirname(ALT_SERVER) . '/' : SITE_URL) . $templatePath;
+	$templateData = base64_encode(file_get_contents(BASE_DIR . $templatePath));
 	
 	switch( $action ) :
 
@@ -69,7 +70,7 @@
 
 					$data = [
 						'action'	=> $action,
-						'templateData'	=> '@'.BASE_DIR . $templatePath,
+						'templateData'	=> $templateData,
 						'templatePath' => $templatePath,
 
 					];
@@ -99,7 +100,7 @@
 						'action'	=> $action,
 						'mailTo'	=> $mailTo,
 						'body'		=> $body,
-						'templateData'	=> '@'.BASE_DIR . $templatePath,
+						'templateData'	=> $templateData, //'@'. BASE_DIR . $templatePath,
 						'templatePath' => $templatePath,
 
 						'MAIL_FROM'	=> MAIL_FROM,
@@ -157,9 +158,9 @@
 
 	endswitch;
 
-	unlink($photoPath);
+	#unlink($photoPath);
 	if ($isAltServer) {
-		unlink(BASE_DIR . $templatePath);
+		#unlink(BASE_DIR . $templatePath);
 	}
 
 	echo json_encode($return);

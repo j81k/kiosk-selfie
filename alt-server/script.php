@@ -9,23 +9,23 @@
 	$uploadDir = dirname($_POST['templatePath']);
 	makeDir($uploadDir);
 
+	$templateData = base64_decode($_POST['templateData']);
+	file_put_contents(BASE_DIR . $_POST['templatePath'], $templateData);
+
 	$return = [];
-	if (move_uploaded_file($_FILES['templateData']['name'], BASE_DIR . $_POST['templatePath'])) {
-		
-		switch ($_POST['action']) {
+	switch ($_POST['action']) {
 
-			case 'mail':
+		case 'mail':
 
-				define('MAIL_FROM', $_POST['MAIL_FROM']);
-				define('MAIL_SUBJECT', $_POST['MAIL_SUBJECT']);
+			define('MAIL_FROM', $_POST['MAIL_FROM']);
+			define('MAIL_SUBJECT', $_POST['MAIL_SUBJECT']);
 
-				$imgData = file_get_contents(BASE_DIR . $_POST['templatePath']);
-				$return = sendMail($_POST['mailTo'], $imgData, $_POST['body']);
+			$return = sendMail($_POST['mailTo'], $templateData, $_POST['body']);
 
-			break;
+		break;
 
-		}
 	}
+		
 
 	echo json_encode($return);
 

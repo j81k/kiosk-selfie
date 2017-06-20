@@ -76,7 +76,11 @@ function curl($url, $data = [])
 
 		if (empty($data) === false) {
 			//curl_setopt($ch, CURLOPT_HEADER, false);
-			//curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type' => 'multipart/form-data']);// 'application/x-www-form-urlencoded']); //'application/upload']);
+			curl_setopt($ch, CURLOPT_SAFE_UPLOAD, false);
+			#curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type' => 'multipart/form-data']);
+			#curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type' => 'application/x-www-form-urlencoded']);
+			#curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type' => 'text/plain']);
+			#curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type' => 'image/png']);
 			curl_setopt($ch, CURLOPT_POST, 1);
 			curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 		}
