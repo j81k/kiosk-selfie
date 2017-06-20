@@ -158,9 +158,9 @@
 
 	endswitch;
 
-	#unlink($photoPath);
+	unlink($photoPath);
 	if ($isAltServer) {
-		#unlink(BASE_DIR . $templatePath);
+		unlink(BASE_DIR . $templatePath);
 	}
 
 	echo json_encode($return);
