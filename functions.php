@@ -58,8 +58,8 @@ function makeDir($dir)
 {
 
 	if( !file_exists($dir) ) :
-		mkdir( BASE_DIR . $dir, 777, TRUE );
-		chmod( BASE_DIR . $dir, 777, TRUE );
+		mkdir(BASE_DIR . $dir, 777, TRUE);
+		//chmod(BASE_DIR . $dir, 777);
 	endif;
 }
 
@@ -71,11 +71,12 @@ function curl($url, $data = [])
 		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 60);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($ch, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);
-		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		#curl_setopt($ch, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);
+		#curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 
 		if (empty($data) === false) {
-			curl_setopt($ch, CURLOPT_HEADER, false);
+			//curl_setopt($ch, CURLOPT_HEADER, false);
+			//curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type' => 'multipart/form-data']);// 'application/x-www-form-urlencoded']); //'application/upload']);
 			curl_setopt($ch, CURLOPT_POST, 1);
 			curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 		}

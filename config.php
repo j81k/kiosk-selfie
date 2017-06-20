@@ -25,7 +25,7 @@ define('MOBILE_NO_PREFIX', '+91');
 define('TWITTER_AUTHOR', 'Admin');
 
 // Live Server
-define('ALT_SERVER', 'http://atkoscales.com/kiosk/alt-server/script.php'); //http://homestead.workout.dev/kiosk/script.php');
+define('ALT_SERVER', 'http://localhost/kiosk-selfie/alt-server/script.php');// 'http://atkoscales.com/kiosk/alt-server/script.php'); 
 
 // ------------------------------------------------------
 error_reporting(E_ERROR);

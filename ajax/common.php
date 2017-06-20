@@ -6,7 +6,7 @@
 
 	$action = $_POST['action'];
 	$data   = $_POST['data'];
-
+	
 	$imgData = base64_decode(str_replace(' ', '+', str_replace('data:image/png;base64,' , '', $data['img'])));
 
 	if (empty($imgData)) 
@@ -14,6 +14,8 @@
 
 	include_once '../config.php';
 	include_once '../functions.php';
+
+	$isAltServer = empty(ALT_SERVER) === false ? true : false;
 
 	$templatePath = UPLOAD_DIR.'templates/';
 	makeDir($templatePath);	
@@ -41,25 +43,40 @@
 	}
 
 	imagecopyresampled($template, $imgData, $xD, $yD, 0, 0, 610, 434, 610, 434); // 615, 468
-
 	$templatePath = $templatePath . 'img_'.$_SERVER['REMOTE_ADDR'].'_'.time().'.png'; 
 	imagepng($template, BASE_DIR . $templatePath);
-	unlink($photoPath);
 
-
+	$templateUrl = $isAltServer ? (dirname(ALT_SERVER) . '/' : SITE_URL) . $templatePath;
+	
 	switch( $action ) :
 
 		case 'sms' :
 
 			$mobileNo = $data['contactNo'];
-			$message = 'Happy Birthday ...' . tinyurl(SITE_URL . $templatePath);
+			$message = 'Happy Birthday ...' . tinyurl($templateUrl);
 
 			if (empty($mobileNo) === false) {
 				$output = sendSms($mobileNo, $message);
 				if (!is_numeric($output)) {
 					// Error	
 					$return = ['success' => false, 'message' => 'SMS is not sent!' . "\r\n" . (empty($output) === false ? $output : 'Oops: something went wrong.')];
-				}	
+
+				} else if ($isAltServer) {
+					
+					/*
+					* Upload Image to Alternative Server
+					*/
+
+					$data = [
+						'action'	=> $action,
+						'templateData'	=> '@'.BASE_DIR . $templatePath,
+						'templatePath' => $templatePath,
+
+					];
+
+					curl(ALT_SERVER, $data);	
+				}
+
 			}else {
 				$return = ['success' => false, 'message' => 'Mobile Number is empty!'];
 			}
@@ -75,21 +92,19 @@
 
 				$body = file_get_contents(BASE_DIR . 'templates/mail/template-' . MAIL_TEMPLATE . '.php');
 				$body = preg_replace('/\{name\}/', '<b>'. $name .'</b>', $body);
-				$body = preg_replace('/\{templateImg\}/', '<img src="'. SITE_URL . $templatePath.'" />', $body);
+				$body = preg_replace('/\{templateImg\}/', '<img src="'. $templateUrl .'" />', $body);
 
-				if (empty(ALT_SERVER) === false) {
+				if ($isAltServer) {
 					$data = [
 						'action'	=> $action,
 						'mailTo'	=> $mailTo,
 						'body'		=> $body,
-						'template'	=> base64_encode($template),
-						'templatePath' => SITE_URL . $templatePath,
+						'templateData'	=> '@'.BASE_DIR . $templatePath,
+						'templatePath' => $templatePath,
 
 						'MAIL_FROM'	=> MAIL_FROM,
 						'MAIL_SUBJECT' => MAIL_SUBJECT,
 					];
-
-					//pre($data);
 
 					$return = curl(ALT_SERVER, $data);	
 				} else {
@@ -141,6 +156,11 @@
 		break;
 
 	endswitch;
+
+	unlink($photoPath);
+	if ($isAltServer) {
+		unlink(BASE_DIR . $templatePath);
+	}
 
 	echo json_encode($return);
 	

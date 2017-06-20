@@ -4,18 +4,27 @@
 	* Created On: 2017-06-19 13:07 
 	*/
 
+	define('BASE_DIR', __DIR__ . '/');
+
+	$uploadDir = dirname($_POST['templatePath']);
+	makeDir($uploadDir);
+
 	$return = [];
-	switch ($_POST['action']) {
+	if (move_uploaded_file($_FILES['templateData']['name'], BASE_DIR . $_POST['templatePath'])) {
+		
+		switch ($_POST['action']) {
 
-		case 'mail':
+			case 'mail':
 
-			define('MAIL_FROM', $_POST['MAIL_FROM']);
-			define('MAIL_SUBJECT', $_POST['MAIL_SUBJECT']);
+				define('MAIL_FROM', $_POST['MAIL_FROM']);
+				define('MAIL_SUBJECT', $_POST['MAIL_SUBJECT']);
 
-			$return = sendMail($_POST['mailTo'], $_POST['template'], $_POST['body']);
+				$imgData = file_get_contents(BASE_DIR . $_POST['templatePath']);
+				$return = sendMail($_POST['mailTo'], $imgData, $_POST['body']);
 
-		break;
+			break;
 
+		}
 	}
 
 	echo json_encode($return);
@@ -48,7 +57,7 @@
 				 . "Content-Transfer-Encoding: base64\r\n"
 				 . "Content-disposition: attachment; file=\"$photoName\"\r\n"
 				 . "\r\n"
-				 . chunk_split($file)
+				 . chunk_split(base64_encode($file))
 				 . $bound_last;
 
 		$subject = empty($subject) === false ? $subject : MAIL_SUBJECT;		 
@@ -58,5 +67,23 @@
 		else 
 		{ 
 		    return false;
+		}
+	}
+
+
+	function makeDir($dir)
+	{
+
+		if( !file_exists($dir) ) :
+			mkdir(BASE_DIR . $dir, 777, TRUE);
+			//chmod(BASE_DIR . $dir, 777);
+		endif;
+	}
+
+	function pre($data, $die = true) 
+	{
+		echo '<pre>Data: '; print_r($data); 
+		if ($die) {
+			die;
 		}
 	}
