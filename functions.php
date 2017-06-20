@@ -13,7 +13,7 @@ function sendSms($mobileNo, $message = '')
 
 function sendMail($to, $photoData, $body, $photoName = 'Photo', $subject = '', $filetype = 'image/png')
 {
-	$bound_text = md5(uniqid(rand(), true));;
+	$bound_text = md5(uniqid(rand(), true));
 	$bound = "--" . $bound_text . "\r\n";
 	$bound_last = "--" . $bound_text . "--\r\n";
 
@@ -26,17 +26,16 @@ function sendMail($to, $photoData, $body, $photoName = 'Photo', $subject = '', $
 
 	$message .=	"Content-Type: text/html; charset=\"iso-8859-1\"\r\n"
 			 . "Content-Transfer-Encoding: 7bit\r\n\r\n"
-			 . $body
-			 . $bound;
+			 . $body;
+	
+	/*$message .= $bound
+				 . "Content-Type: $filetype; name=\"$photoName\"\r\n"
+				 . "Content-Transfer-Encoding: base64\r\n"
+				 . "Content-disposition: attachment; file=\"$photoName\"\r\n"
+				 . "\r\n"
+				 . chunk_split(base64_encode($photoData));*/
 
-	$file =	$photoData;
-
-	$message .=	"Content-Type: $filetype; name=\"$photoName\"\r\n"
-			 . "Content-Transfer-Encoding: base64\r\n"
-			 . "Content-disposition: attachment; file=\"$photoName\"\r\n"
-			 . "\r\n"
-			 . chunk_split(base64_encode($file))
-			 . $bound_last;
+	$message .= $bound_last;
 
 	$subject = empty($subject) === false ? $subject : MAIL_SUBJECT;		 
 	if (mail($to, $subject, $message, $headers)) {
