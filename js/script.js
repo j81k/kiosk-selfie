@@ -19,6 +19,19 @@ navigator.getUserMedia = (
     navigator.msGetUserMedia
 );
 
+function showPopup($dialog, toShow)
+{
+    $dialog = typeof $dialog == 'undefined' ? $('#popup') : $dialog;    
+    if (toShow == false) {
+        // Hide
+        $dialog.slideUp('slow');
+        show('home');
+    } else {
+        $('#virtual-keyboard').removeClass('slide-up');
+        $dialog.slideDown('slow');
+    }
+}
+
 function virtualKeyboard(toShow)
 {
     
@@ -206,6 +219,13 @@ function share(type){
 
             if (typeof results['message'] != 'undefined') {
                 alert('Message: '+ results['message']);
+            }else {
+                showPopup();
+
+                setTimeout(function(){
+                    showPopup($('#popup'), false);
+                    show('home');
+                }, 4000);
             } 
 
             if (type == 'twitter') {
@@ -246,7 +266,14 @@ function share(type){
                 if( type == 'print' ) {
                     // Print
                     $iframe.innerHTML = '<img src="'+ imgURL +'" style="width: 100%; height: 100%" onload="window.print();"/>';
-
+                    
+                    showPopup();
+                    $('#load-frame').hide();
+                    setTimeout(function(){
+                        showPopup($('#popup'), false);
+                        show('home');
+                    }, 4000);
+                    
                 }
 
             break;
@@ -292,7 +319,7 @@ function show(page){
 
 			// Home 
 			page = 'home';
-            $('#dock-container .icon.active').removeClass('active');
+            resetShare();
         break;
             
 		case 'prepare' :
@@ -328,6 +355,8 @@ function resetShare(){
     $('#preview-page').removeAttr('data-submit');
     $('#share-inp-block, #share-inp-block .inp').hide();
     $('.email, .contact-no').val('');
+
+    $('#virtual-keyboard .close-btn').trigger('click');
 }
 
 
@@ -341,6 +370,10 @@ window.onload = init;
 
 $(document).on('ready', function(){
         show('home'); //# 
+
+        $('.dialog .close-btn').on('click', function(){
+            showPopup($(this).parent().closest('.dialog'), false);
+        });
 
         $(document).on('click', '#inp-clr-btn', function(){
             $('input.active').val('').focus();

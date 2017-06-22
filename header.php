@@ -44,7 +44,27 @@ require_once './config.php';
         </header>
         
         <section>
-            
+            <div id="popup" class="dialog">
+                <div class="wrapper">
+                    <div class="header">
+                        <i class="fa fa-info-circle"></i> 
+                        <span class="title">Thank you</span>
+                        <i class="fa fa-times close-btn"></i> 
+                    </div>
+
+                    <div class="content">
+                        <div class="status-text success">
+                            <i class="fa fa-check-circle fade"></i>
+                            <p>Success: The Photo has been shared..</p>
+                        </div>
+                        <div>    
+                            <p>Thank you for using the application.</p>
+                        </div>        
+                    </div>
+
+                    <div class="footer">&nbsp;</div>
+                </div>
+            </div>
             
     
 

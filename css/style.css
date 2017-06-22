@@ -52,6 +52,73 @@ body {
     animation-duration: 6s;
 }
 
+.dialog {
+    display: none;
+    z-index: 9999;
+    width: 101%;
+    height: 101%;
+    background: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    margin-left: -1%;
+    margin-top: -1%;
+}
+
+.dialog .wrapper {
+    width: 50%; 
+    margin: 15% auto;
+    background: #fff;
+    color: #666;
+    box-shadow: 3px 3px 9px #333;
+}
+
+.dialog .header {
+    background: linear-gradient(#fff, #ccc);
+    min-height: 20px;
+    box-shadow: 1px 1px 3px #333;
+    padding: 10px;
+}
+
+.dialog .footer {
+    background: linear-gradient(#fff, #ccc);
+    min-height: 20px;
+}
+
+.dialog .title {
+    letter-spacing: 3px;
+    text-shadow: 1px 1px 2px #333;
+    font-size: 18px;
+}
+
+.dialog .content {
+    padding: 10px;
+    letter-spacing: 1px;
+}
+
+.dialog .fa {
+    font-size: 18px;
+    padding: 5px;
+    text-shadow: 1px 1px 1px #333;
+}
+
+.dialog .header .close-btn {
+    float: right;
+    right: 10px;
+    cursor: pointer;
+}
+
+#popup .content {
+    text-align: center;
+}
+
+#popup .content .status-text.success .fa {
+    font-size: 50px;
+    color: #13b513;
+    margin: 10px;
+    height: 50px;
+    text-shadow: 1px 1px 3px #333;
+}
+
+
 #start-btn {
     
     left: 0%;
