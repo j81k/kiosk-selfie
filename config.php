@@ -17,7 +17,7 @@ define('MAIL_SUBJECT', 'Selfie: Photo is attached!');
 define('MAIL_TEMPLATE', 0); 
 
 // SMS
-define('SMS_GATEWAY_URL', 'http://sms.glg.co.in/sendsms?uname=atkochennai&pwd=atkochennai&senderid=ATKOWS&route=T');
+define('SMS_GATEWAY_URL', 'http://sms.glg.co.in/sendsms?uname=selfie&pwd=selfie&senderid=SELFIE&route=T');
 define('MOBILE_NO_PREFIX', '+91');
 
 
@@ -25,7 +25,6 @@ define('MOBILE_NO_PREFIX', '+91');
 define('TWITTER_AUTHOR', 'Admin');
 
 // Live Server
-//define('ALT_SERVER', 'http://localhost/kiosk-selfie/alt-server/script.php');
 define('ALT_SERVER', 'http://atkoscales.com/kiosk/alt-server/script.php'); 
 
 // ------------------------------------------------------

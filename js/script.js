@@ -217,7 +217,7 @@ function share(type){
             // Success
             results = JSON.parse(results);
 
-            if (typeof results['message'] != 'undefined') {
+            if (results != '' && typeof results['message'] != 'undefined') {
                 alert('Message: '+ results['message']);
             }else {
                 showPopup();

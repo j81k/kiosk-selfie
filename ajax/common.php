@@ -75,7 +75,7 @@
 
 					];
 
-					curl(ALT_SERVER, $data);	
+					$return = curl(ALT_SERVER, $data);	
 				}
 
 			}else {
