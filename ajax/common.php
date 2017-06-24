@@ -15,6 +15,7 @@
 	include_once '../config.php';
 	include_once '../functions.php';
 
+	$remoteAddr = str_replace(':', '', $_SERVER['REMOTE_ADDR']);
 	$isAltServer = empty(ALT_SERVER) === false ? true : false;
 
 	$templatePath = UPLOAD_DIR.'templates/';
@@ -23,7 +24,7 @@
 	/*
 	* Write img data as file
 	*/
-	$photoPath = BASE_DIR . $templatePath . 'img_original_'.$_SERVER['REMOTE_ADDR'].'_'.time().'.png'; 
+	$photoPath = BASE_DIR . $templatePath . 'img_original_'. $remoteAddr .'_'.time().'.png'; 
 	file_put_contents($photoPath, $imgData );
 	$imgData = imagecreatefrompng($photoPath);
 
@@ -43,7 +44,7 @@
 	}
 
 	imagecopyresampled($template, $imgData, $xD, $yD, 0, 0, 610, 434, 610, 434); // 615, 468
-	$templatePath = $templatePath . 'img_'.$_SERVER['REMOTE_ADDR'].'_'.time().'.png'; 
+	$templatePath = $templatePath . 'img_'. $remoteAddr .'_'.time().'.png'; 
 	imagepng($template, BASE_DIR . $templatePath);
 
 	$templateUrl = ($isAltServer ? dirname(ALT_SERVER) . '/' : SITE_URL) . $templatePath;

@@ -8,14 +8,6 @@ body {
     overflow: hidden;
 }
 
-/*.bg-home {
-    background: url(../images/bg-home.jpg);
-}
-
-.bg-prepare {
-    background: url(../images/bg-prepare.jpg);
-}*/
-
 .page {
     display: none;
 }
@@ -177,6 +169,7 @@ body {
     letter-spacing: 3px;
     font-weight: bold;
     text-shadow: 1px 1px 2px #fff;
+    margin-left: -2%;
 }
 
 /** Init Page ***/
@@ -399,14 +392,25 @@ video {
     min-width: 25% !important;
 }
 
-#virtual-keyboard .close-btn {
-    font-size: 40px;
-    color: #f33;
+#virtual-keyboard .header .fa {
     position: absolute;
-    right: 5%;
+    right: 3%;
     margin-top: 16px;
     z-index: 999;
     cursor: pointer;
+    font-size: 40px;
+}
+
+#virtual-keyboard .backspace-btn {
+    color: #fff;
+    min-width: 100px;
+    padding: 5px;
+    text-align: center;
+    margin-top: 135px !important;
+    min-height: 50px;
+    line-height: 50px;
+    /*background: #f33/*#26a7b9;*/
+    box-shadow: 1px 1px 3px #333;
 }
 
 #inp-clr-btn {

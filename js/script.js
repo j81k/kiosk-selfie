@@ -32,6 +32,38 @@ function showPopup($dialog, toShow)
     }
 }
 
+function getCaret(el) {
+    if (el.selectionStart) {
+        return el.selectionStart;
+    } else if (document.selection) {
+        el.focus();
+
+        var r = document.selection.createRange();
+        if (r == null) {
+            return 0;
+        }
+
+        var re = el.createTextRange(),
+            rc = re.duplicate();
+        re.moveToBookmark(r.getBookmark());
+        rc.setEndPoint('EndToStart', re);
+
+        return rc.text.length;
+    }
+    return 0;
+}
+
+function resetCursor(txtElement, currentPos) { 
+    if (txtElement.setSelectionRange) { 
+        txtElement.focus(); 
+        txtElement.setSelectionRange(currentPos, currentPos); 
+    } else if (txtElement.createTextRange) { 
+        var range = txtElement.createTextRange();  
+        range.moveStart('character', currentPos); 
+        range.select(); 
+    } 
+}
+
 function virtualKeyboard(toShow)
 {
     
@@ -58,6 +90,7 @@ function virtualKeyboard(toShow)
 
         html += '<div id="virtual-keyboard" class="slide-up easy-up">'
             +      '<div class="header">'
+            +          '<i class="fa fa-angle-double-left backspace-btn" style="background:'+ keybrdClr +';"></i>'
             +          '<i class="fa fa-times-circle close-btn" style="color: '+ keybrdClr +'"></i>'
             +      '</div>'
             +      '<div class="content">';
@@ -102,6 +135,25 @@ function virtualKeyboard(toShow)
         $('#virtual-keyboard .close-btn').on('click', function(){
             virtualKeyboard(false);                    
             $('input.active').removeClass('active');
+        });
+
+        $('#virtual-keyboard .backspace-btn').on('click', function(){
+            var $input  = $('input.active');
+
+            if ($input.length > 0) {
+                var currentPos = getCaret($input)
+                ,   text       = $input.val();
+
+                console.log('Pos: '+currentPos);
+
+                text = text.substr(0, currentPos-1) + text.substr(currentPos, text.length);
+
+
+                $input.val(text).focus();
+
+                resetCursor($input, currentPos-1);
+
+            }
         });
 
     }
@@ -213,20 +265,21 @@ function share(type){
             data.data.contactNo = contactNo;
         }
 
+        if (type != 'twitter') {
+            showPopup();
+            setTimeout(function(){
+                showPopup($('#popup'), false);
+                show('home');
+            }, 4000);
+        }
+
         $.post( siteUrl + 'ajax/common.php', data, function(results){
             // Success
             results = JSON.parse(results);
 
-            if (results != '' && typeof results['message'] != 'undefined') {
+            /*if (results != '' && typeof results['message'] != 'undefined') {
                 alert('Message: '+ results['message']);
-            }else {
-                showPopup();
-
-                setTimeout(function(){
-                    showPopup($('#popup'), false);
-                    show('home');
-                }, 4000);
-            } 
+            }*/ 
 
             if (type == 'twitter') {
                 var win = window.open('https://twitter.com/intent/tweet?url='+ siteUrl + results['metaPath'] +'&text='+ results['title'] +'&hashtags='+ results['tags'] +'&via='+ results['via'],  '', 'menubar=no, location=no, resizable=no, scrollbars=no, status=no');
