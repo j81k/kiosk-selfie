@@ -349,6 +349,7 @@ video {
 
 #virtual-keyboard {
   width: 102%;
+  height: 100%;
   margin-left: -1%;
   padding: 5px 0px;
   box-shadow: 1px -3px 30px #333;
@@ -415,8 +416,17 @@ video {
 
 #inp-clr-btn {
     position: absolute;
-    margin-left: -35px;
-    margin-top: 15px;
     font-size: 25px;
     z-index: 999;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 50px;
+    background: #fff;
+    width: 18px;
+    color: #f33;
+    text-shadow: 3px 3px 3px #999; 
+    right: 150px;
+    margin-top: 8px;
 }
+
+

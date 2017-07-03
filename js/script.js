@@ -64,6 +64,11 @@ function resetCursor(txtElement, currentPos) {
     } 
 }
 
+function hasClass(ele, cls) 
+{
+    return (' ' + ele.className + ' ' ).indexOf(' ' + cls + ' ') > -1;
+}
+
 function virtualKeyboard(toShow)
 {
     
@@ -126,34 +131,44 @@ function virtualKeyboard(toShow)
 
             $('input.active').val(value).focus();
 
+            /*
             if ($('#inp-clr-btn').length == 0 && value != ''){
                 $('input.active').after('<i class="fa fa-times-circle" id="inp-clr-btn" style="color: '+ keybrdClr +'"></i>');
-            }
+            }*/
+
 
         });
 
         $('#virtual-keyboard .close-btn').on('click', function(){
             virtualKeyboard(false);                    
-            $('input.active').removeClass('active');
+            //$('input.active').removeClass('active');
         });
 
         $('#virtual-keyboard .backspace-btn').on('click', function(){
-            var $input  = $('input.active');
+            
+            var inps = document.getElementsByTagName('input')
+            ,   _inp = null;
 
-            if ($input.length > 0) {
-                var currentPos = getCaret($input)
-                ,   text       = $input.val();
+            for (i = 0; i < inps.length; i++) {
+                if (hasClass(inps[i], 'active')) {
+                    _inp = inps[i];
+                }
+            }
 
-                console.log('Pos: '+currentPos);
+            if (_inp != null) {
+                
+                var currentPos = getCaret(_inp);
+                console.log('Pos: '+ currentPos);    
+                var text = $(_inp).val();
 
-                text = text.substr(0, currentPos-1) + text.substr(currentPos, text.length);
+                var backSpace = text.substr(0, currentPos-1) + text.substr(currentPos, text.length);
 
-
-                $input.val(text).focus();
-
-                resetCursor($input, currentPos-1);
+                $(_inp).val(backSpace);
+                
+                resetCursor(_inp, currentPos-1);
 
             }
+        
         });
 
     }
@@ -404,7 +419,7 @@ function show(page){
 
 function resetShare(){
     $('#load-frame').remove();
-    $('#dock-container .icon.active').removeClass('active');
+    $('#dock-container .icon.active, input.active').removeClass('active');
     $('#preview-page').removeAttr('data-submit');
     $('#share-inp-block, #share-inp-block .inp').hide();
     $('.email, .contact-no').val('');
@@ -429,8 +444,13 @@ $(document).on('ready', function(){
         });
 
         $(document).on('click', '#inp-clr-btn', function(){
-            $('input.active').val('').focus();
-            $(this).remove();
+            if ($('input.active').val() != '') {
+                $('input.active').val('').focus();    
+            }else {
+                $('#share-inp-block, #share-inp-block .inp').hide();
+                $('#virtual-keyboard .close-btn').trigger('click');    
+            }
+            
         });
 
         $('input').on('focus', function(){
