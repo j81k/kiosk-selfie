@@ -32,7 +32,8 @@ function showPopup($dialog, toShow)
     }
 }
 
-function getCaret(el) {
+function getCaret(el) 
+{
     if (el.selectionStart) {
         return el.selectionStart;
     } else if (document.selection) {
@@ -53,7 +54,8 @@ function getCaret(el) {
     return 0;
 }
 
-function resetCursor(txtElement, currentPos) { 
+function resetCursor(txtElement, currentPos) 
+{ 
     if (txtElement.setSelectionRange) { 
         txtElement.focus(); 
         txtElement.setSelectionRange(currentPos, currentPos); 
@@ -116,35 +118,49 @@ function virtualKeyboard(toShow)
 
         $('body').append(html);
 
-        $('#virtual-keyboard .key').on('click', function(){
+        $('#virtual-keyboard .key').on('click', function()
+        {
             var id = $(this).attr('id')
             ,   s  = id.split('-')
-            ,   value = $('input.active').val()+(s[1] == 'space' ? ' ' : s[1]);
+            ,   char = s[1] == 'space' ? ' ' : s[1];
 
-            if ($('input.active').hasClass('contact-no')) {
-                value = value.substring(value.length-10, 11);
+            var inps = document.getElementsByTagName('input')
+            ,   _inp = null;
 
-                if (parseInt(value) == 0) {
-                    value = '';
+            for (i = 0; i < inps.length; i++) {
+                if (hasClass(inps[i], 'active')) {
+                    _inp = inps[i];
                 }
             }
 
-            $('input.active').val(value).focus();
+            if (_inp != null) {
+                
+                var currentPos = getCaret(_inp)
+                ,   value = $(_inp).val();
 
-            /*
-            if ($('#inp-clr-btn').length == 0 && value != ''){
-                $('input.active').after('<i class="fa fa-times-circle" id="inp-clr-btn" style="color: '+ keybrdClr +'"></i>');
-            }*/
+                value = value.substr(0, currentPos) + char + value.substr(currentPos, value.length);
+                if ($(_inp).hasClass('contact-no')) {
+                    value = value.substring(value.length-10, 11);
 
+                    if (parseInt(value) == 0) {
+                        value = '';
+                    }
+                }
+
+                $(_inp).val(value);
+                resetCursor(_inp, currentPos+1); 
+            }    
 
         });
 
-        $('#virtual-keyboard .close-btn').on('click', function(){
+        $('#virtual-keyboard .close-btn').on('click', function()
+        {
             virtualKeyboard(false);                    
             //$('input.active').removeClass('active');
         });
 
-        $('#virtual-keyboard .backspace-btn').on('click', function(){
+        $('#virtual-keyboard .backspace-btn').on('click', function()
+        {
             
             var inps = document.getElementsByTagName('input')
             ,   _inp = null;
@@ -157,13 +173,11 @@ function virtualKeyboard(toShow)
 
             if (_inp != null) {
                 
-                var currentPos = getCaret(_inp);
-                console.log('Pos: '+ currentPos);    
-                var text = $(_inp).val();
+                var currentPos = getCaret(_inp)
+                ,   text = $(_inp).val();
 
-                var backSpace = text.substr(0, currentPos-1) + text.substr(currentPos, text.length);
-
-                $(_inp).val(backSpace);
+                text = text.substr(0, currentPos-1) + text.substr(currentPos, text.length);
+                $(_inp).val(text);
                 
                 resetCursor(_inp, currentPos-1);
 
@@ -200,13 +214,15 @@ function initTimer(){
 			window.clearInterval(timer);
             
             //$('#timer').fadeOut('slow', function(){
+                $('#init-page').hide();
                 show('preview');
             //});
         
 		}else {
             $('#timer').html(i);
         }
-            --i;
+        --i;
+
 	}, 1000);
 
 
@@ -244,7 +260,8 @@ function openCamera(){
     
 }
 
-function share(type){
+function share(type)
+{
     var isSubmit = $('#preview-page').attr('data-submit') ? true : false
     ,   imgURL = $canvas.toDataURL('image/png');
 
@@ -437,84 +454,83 @@ function init(){
 window.onload = init;
 
 $(document).on('ready', function(){
-        show('home'); //# 
+    show('home'); //# 
 
-        $('.dialog .close-btn').on('click', function(){
-            showPopup($(this).parent().closest('.dialog'), false);
-        });
+    $('.dialog .close-btn').on('click', function(){
+        showPopup($(this).parent().closest('.dialog'), false);
+    });
 
-        $(document).on('click', '#inp-clr-btn', function(){
-            if ($('input.active').val() != '') {
-                $('input.active').val('').focus();    
-            }else {
-                $('#share-inp-block, #share-inp-block .inp').hide();
-                $('#virtual-keyboard .close-btn').trigger('click');    
-            }
-            
-        });
+    $(document).on('click', '#inp-clr-btn', function(){
+        if ($('input.active').val() != '') {
+            $('input.active').val('').focus();    
+        }else {
+            $('#share-inp-block, #share-inp-block .inp').hide();
+            $('#virtual-keyboard .close-btn').trigger('click');    
+        }
+        
+    });
 
-        $('input').on('focus', function(){
-            $('input.active').removeClass('active');
+    $('input').on('focus', function(){
+        $('input.active').removeClass('active');
+        $(this).addClass('active');
+        virtualKeyboard(true);                    
+    });
+
+    $('#start-btn').on('click', function(){
+		show('prepare');
+	});
+    
+    $('#dock-container .icon, #share-sbmt-btn').on('click', function(){
+        var id = $(this).attr('id');
+
+        if (id == 'share-sbmt-btn') {
+            id = $('#dock-container .icon.active').attr('id');
+
+            $('#preview-page').attr('data-submit', true);
+        }else {
+            resetShare();
             $(this).addClass('active');
-            virtualKeyboard(true);                    
-        });
+        }
 
-        $('#start-btn').on('click', function(){
-    		show('prepare');
-    	});
-        
-        $('#dock-container .icon, #share-sbmt-btn').on('click', function(){
-            var id = $(this).attr('id');
-
-            if (id == 'share-sbmt-btn') {
-                id = $('#dock-container .icon.active').attr('id');
-
-                $('#preview-page').attr('data-submit', true);
-            }else {
-                resetShare();
-                $(this).addClass('active');
-            }
-
-            switch(id) {
-                
-                case 'share-retake-btn' :
-                    
-                    show('prepare');
-                break;  
-
-                case 'share-print-btn' :
-
-                    share('print');
-                break;
-
-                case 'share-mail-btn' :
-
-                    share('mail');
-                break;
-
-                case 'share-sms-btn' :
-
-                    share('sms');
-                break;  
-
-                case 'share-fb-btn' :
-
-                    share('facebook');
-                break;
-
-                case 'share-tw-btn' :
-
-                    share('twitter');
-                break;
-                
-                default :
-
-                    show('home');
-                break;    
-                
-            }
+        switch(id) {
             
-        });
+            case 'share-retake-btn' :
+                
+                show('prepare');
+            break;  
+
+            case 'share-print-btn' :
+
+                share('print');
+            break;
+
+            case 'share-mail-btn' :
+
+                share('mail');
+            break;
+
+            case 'share-sms-btn' :
+
+                share('sms');
+            break;  
+
+            case 'share-fb-btn' :
+
+                share('facebook');
+            break;
+
+            case 'share-tw-btn' :
+
+                share('twitter');
+            break;
+            
+            default :
+
+                show('home');
+            break;    
+            
+        }
         
+    });
         
 });
