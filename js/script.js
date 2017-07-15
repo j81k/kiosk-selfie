@@ -189,8 +189,10 @@ function virtualKeyboard(toShow)
 
     if (toShow) { 
         if ($('input.active').hasClass('contact-no')) {
+            $('#virtual-keyboard').addClass('minimal');
             $('#virtual-keyboard .key').not('.key.digit').hide();
         }else {
+            $('#virtual-keyboard').removeClass('minimal');
             $('#virtual-keyboard .key').show();
         }
 
@@ -428,6 +430,7 @@ function show(page){
 		
 	}
 
+    $('body').attr('id', 'body-' + page);
 	$('#'+ page +'-page').fadeIn('slow', function(){
 		$(this).addClass('active');
 	});
@@ -454,6 +457,7 @@ function init(){
 window.onload = init;
 
 $(document).on('ready', function(){
+    //alert($(window).width() + ', ' +$(window).height());
     show('home'); //# 
 
     $('.dialog .close-btn').on('click', function(){
@@ -480,7 +484,7 @@ $(document).on('ready', function(){
 		show('prepare');
 	});
     
-    $('#dock-container .icon, #share-sbmt-btn').on('click', function(){
+    $('#dock-container .icon, #share-sbmt-btn, #preview-ctrls > div').on('click', function(){
         var id = $(this).attr('id');
 
         if (id == 'share-sbmt-btn') {

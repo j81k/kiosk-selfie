@@ -36,6 +36,16 @@ include_once './header.php';
             <canvas id="preview-frame" class="frame"></canvas>    
         </div>
 
+        <div id="preview-ctrls"> 
+            <div id="share-retake-btn">
+                <img src="<?php echo SITE_URL; ?>images/retake.png" class="icon" />
+            </div>
+
+            <div id="share-home-btn">
+                <img src="<?php echo SITE_URL; ?>images/home.png" class="icon" />
+            </div>
+        </div>
+
         <div id="share-inp-block" class="middle">
             <i id="inp-clr-btn" class="fa fa-times-circle"></i>
             <input type="text" class="inp email" placeholder="email@example.com" value="" />
@@ -48,9 +58,7 @@ include_once './header.php';
         <div id="dock-container" class="easy-up">
             <div id="dock">
                 <ul>
-                    <li><img src="<?php echo SITE_URL; ?>images/retake.png" id="share-retake-btn" class="icon" /></li>
                     <li><img src="<?php echo SITE_URL; ?>images/sms.png" id="share-sms-btn" class="icon" /></li>
-                    <li><img src="<?php echo SITE_URL; ?>images/home.png" id="share-home-btn" class="icon" /></li>
                     <li><img src="<?php echo SITE_URL; ?>images/mail.png" id="share-mail-btn" class="icon" /></li>
                     <!-- <li><img src="<?php echo SITE_URL; ?>images/facebook.png" id="share-fb-btn" class="icon" /></li>
                     <li><img src="<?php echo SITE_URL; ?>images/twitter.png" id="share-tw-btn" class="icon" /></li> -->
