@@ -34,6 +34,7 @@ require_once './config.php';
             var timerOut    = <?php echo SHOT_TIMEOUT; ?>;
             var idleTimeout = <?php echo IDLE_TIMEOUT; ?>;
             var keybrdClr   = '<?php echo KEYBOARD_CLR; ?>';
+            var webLink     = '<?php echo WEB_LINK; ?>';
         </script>
         
     </head>
@@ -44,6 +45,43 @@ require_once './config.php';
         </header>
         
         <section>
+            <div id="loading-popup" class="dialog">
+                <div class="wrapper">
+                    <div class="header">
+                        <i class="fa fa-info-circle"></i> 
+                        <span class="title">Please wait ...</span>
+                    </div>
+
+                    <div class="content">
+                        <div id="loader" class="status-text success">
+                            <i class="fa fa-spinner rotate"></i>
+                            <p class="fade">Loading ...</p>
+                        </div>
+                    </div>
+
+                    <div class="footer">&nbsp;</div>
+                </div>
+            </div>
+
+            <div id="loader-popup" class="dialog">
+                <div class="wrapper">
+                    <div class="header">
+                        <i class="fa fa-info-circle"></i> 
+                        <span class="title">Please wait ...</span>
+                    </div>
+
+                    <div class="content">
+                        <div id="loader" class="status-text success">
+                            <i class="fa fa-spinner rotate"></i>
+                            <p class="fade">Sharing your photo ...</p>
+                        </div>
+                    </div>
+
+                    <div class="footer">&nbsp;</div>
+                </div>
+            </div>
+
+
             <div id="popup" class="dialog">
                 <div class="wrapper">
                     <div class="header">

@@ -5,6 +5,9 @@
 	*/
 
 	define('BASE_DIR', __DIR__ . '/');
+	$protocol = $_SERVER['HTTPS'] == 'on' ? 'https' : 'http';
+	define('SITE_URL', empty($_SERVER['HTTP_REFERER']) === false ? $_SERVER['HTTP_REFERER'] : $protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['REQUEST_URI']).'/');
+
 
 	$uploadDir = dirname($_POST['templatePath']);
 	makeDir($uploadDir);
@@ -12,7 +15,7 @@
 	$templateData = base64_decode($_POST['templateData']);
 	file_put_contents(BASE_DIR . $_POST['templatePath'], $templateData);
 
-	$return = [];
+	$return = array();
 	switch ($_POST['action']) {
 
 		case 'mail':
@@ -21,6 +24,30 @@
 			define('MAIL_SUBJECT', $_POST['MAIL_SUBJECT']);
 
 			$return = sendMail($_POST['mailTo'], $templateData, $_POST['body']);
+
+		break;
+
+		case 'twitter':
+
+			makeDir($_POST['metaPath']);
+
+			$html = '<!DOCTYPE html><html><head>'
+				 . "\r\n" .	'<meta charset="utf-8" />'	
+				 . "\r\n" .	'<meta name="twitter:card" content="summary_large_image" />'
+				 . "\r\n" . '<meta name="twitter:site" content="@'. $_POST['via'] .'" />'
+				 . "\r\n" . '<meta name="twitter:creator" content="@'. $_POST['author'] .'" />'
+				 . "\r\n" .'<meta name="twitter:title" content="'. $_POST['title'] .'" />'
+				 . "\r\n" .	'<meta name="twitter:description" content="'. $_POST['desc'] .'" />'
+				 . "\r\n" . '<meta name="twitter:image" content="'. SITE_URL . $_POST['templatePath'] .'" />' 
+				 . "\r\n" . '</head><body></body></html>'; 
+
+			file_put_contents(BASE_DIR . $_POST['metaPath'] . 'index.html', $html);
+
+		break;
+
+		case 'facebook':
+
+			$return['templateUrl'] = SITE_URL . $_POST['templatePath'];
 
 		break;
 

@@ -2,6 +2,10 @@
 
 Repo: https://github.com/j81k/kiosk-selfie.git
 
+[Important]
+* Windows
+	Screen Res: 768 x 1366 (Portrait Mode)
+
 
 Email:
 ----------------------------------------------------------------
@@ -21,8 +25,6 @@ Email:
 
 
 
-
-[Important]
 ----------------------------------------------------------------
 
 [Ubuntu]
@@ -32,3 +34,12 @@ Email:
 * Start Chrome
 	> google-chrome --kiosk --kiosk-printing --unsafely-treat-insecure-origin-as-secure="http://atkoscales.com/kiosk/" --disable-web-security --user-data-dir http://atkoscales.com/kiosk/	
 
+
+Pending:
+----------------------------------------------------------------
+* Loading Icon
+* Automatically logout from FB, Twitter
+* Show Virtual Keyboard for "FB, Twitter Login page"
+
+* New Page before of Home Page
+* Enable Navigation buttons

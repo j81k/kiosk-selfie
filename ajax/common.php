@@ -99,11 +99,11 @@
 				if ($isAltServer) {
 					$data = [
 						'action'	=> $action,
-						'mailTo'	=> $mailTo,
-						'body'		=> $body,
 						'templateData'	=> $templateData, //'@'. BASE_DIR . $templatePath,
 						'templatePath' => $templatePath,
 
+						'mailTo'	=> $mailTo,
+						'body'		=> $body,
 						'MAIL_FROM'	=> MAIL_FROM,
 						'MAIL_SUBJECT' => MAIL_SUBJECT,
 					];
@@ -128,33 +128,48 @@
 		case 'twitter' :
 
 			$returnPath = UPLOAD_DIR . 'twitter/';
-			makeDir($returnPath);
+			//makeDir($returnPath);
 
 			$return = [
-				'metaPath'	=> urlencode($returnPath),
+				'action'		=> $action,
+				'templateData'	=> $templateData, 
+				'templatePath' 	=> $templatePath,
+
+				'metaPath'	=> $returnPath,
 				'title'		=> 'Happy Birthday',
 				'tags'		=> 'Birthday',
-				'via'		=> SITE_NAME,
+				'via'		=> TWITTER_USER,
 				'author'	=> TWITTER_AUTHOR,
 				'desc'		=> 'Many more happy returns of the day!'
 			];
 
-			$html = '<html><head>'
-				 . 		'<meta name="twitter:card" content="summary_large_image">'
-				 . 		'<meta name="twitter:site" content="@'. $return['via'] .'">'
-				 . 		'<meta name="twitter:creator" content="@'. $return['author'] .'">'
-				 . 		'<meta name="twitter:title" content="'. $return['title'] .'">'
-				 .		'<meta name="twitter:description" content="'. $return['desc'] .'">'
-				 .		'<meta name="twitter:image" content="'. SITE_URL . $templatePath .'">' // http://graphics8.nytimes.com/images/2012/02/19/us/19whitney-span/19whitney-span-articleLarge.jpg
-				 . '</head><body></body></html>'; 
+			curl(ALT_SERVER, $return);
+			unset($return['templateData']);
+			$return['tinyPath'] = tinyUrl($_POST['appUrl'] . $return['metaPath']);
 
-				 
-			file_put_contents(BASE_DIR . $returnPath . 'index.php', $html);	 
+		break;
+
+		case 'facebook' :
+
+			$return = [
+				'action'		=> $action,
+				'templatePath' 	=> $templatePath,
+				'templateData'	=> $templateData,
+
+				'title'		   => 'Happy Birthday'
+			];
+
+			curl(ALT_SERVER, $return);
+			unset($return['templateData']);
+			$return['tinyPath'] = tinyUrl($_POST['appUrl'] . $return['templatePath']);
 
 		break;
 
 		default :
-			$return = $templatePath;
+			$return = [
+				'templatePath'	=> $templatePath
+			];
+			
 		break;
 
 	endswitch;

@@ -98,7 +98,7 @@ function virtualKeyboard(toShow)
         html += '<div id="virtual-keyboard" class="slide-up easy-up">'
             +      '<div class="header">'
             +          '<i class="fa fa-angle-double-left backspace-btn" style="background:'+ keybrdClr +';"></i>'
-            +          '<i class="fa fa-times-circle close-btn" style="color: '+ keybrdClr +'"></i>'
+            +          '<i class="fa fa-times-circle close-btn" ></i>'
             +      '</div>'
             +      '<div class="content">';
 
@@ -207,25 +207,25 @@ function virtualKeyboard(toShow)
 
 function initTimer(){
 
-	window.clearInterval(timer);
+    window.clearInterval(timer);
     $('#timer').html('');
 
-	var i = timerOut;
-	timer = window.setInterval(function(){
+    var i = timerOut;
+    timer = window.setInterval(function(){
         if( i <= 0 ) {
-			window.clearInterval(timer);
+            window.clearInterval(timer);
             
             //$('#timer').fadeOut('slow', function(){
                 $('#init-page').hide();
                 show('preview');
             //});
         
-		}else {
+        }else {
             $('#timer').html(i);
         }
         --i;
 
-	}, 1000);
+    }, 1000);
 
 
 }
@@ -233,6 +233,10 @@ function initTimer(){
 function openCamera(){
     
     if( navigator.getUserMedia ) {
+    
+        /*var video = document.getElementById('video-frame');
+        video.width = window.innerWidth;
+        video.height = window.innerHeight;*/
         
         navigator.getUserMedia({
                     video: true,
@@ -244,7 +248,8 @@ function openCamera(){
                     streamObj = localMediaStream;
                     $video = document.querySelector('video');
                     $video.src = window.URL.createObjectURL(streamObj);
-                    initTimer();	
+                    
+                    initTimer();    
                 },
                 
                 // Error
@@ -260,6 +265,15 @@ function openCamera(){
         show('home');
     }
     
+}
+
+function showThankPopup()
+{
+    showPopup();
+    setTimeout(function(){
+        showPopup($('#popup'), false);
+        show('home');
+    }, 4000);
 }
 
 function share(type)
@@ -299,24 +313,43 @@ function share(type)
             data.data.contactNo = contactNo;
         }
 
-        if (type != 'twitter') {
-            showPopup();
-            setTimeout(function(){
-                showPopup($('#popup'), false);
-                show('home');
-            }, 4000);
+        var appUrl = siteUrl;
+        if(typeof altServer != 'undefined' && altServer != '') {
+            //ajaxUrl = altServer;
+            if (type == 'facebook' || type == 'twitter' || type == 'mail') {
+                showPopup($('#loader-popup'));    
+            }
+            
+            appUrl = altServer.substring(0, altServer.lastIndexOf('/')).replace('alt-server', '')+'/';
         }
+
+        data.appUrl = appUrl;
+
 
         $.post( siteUrl + 'ajax/common.php', data, function(results){
             // Success
+            showPopup($('#loader-popup'), false);
+            
             results = JSON.parse(results);
 
             /*if (results != '' && typeof results['message'] != 'undefined') {
                 alert('Message: '+ results['message']);
             }*/ 
 
+            var newTab = '';
             if (type == 'twitter') {
-                var win = window.open('https://twitter.com/intent/tweet?url='+ siteUrl + results['metaPath'] +'&text='+ results['title'] +'&hashtags='+ results['tags'] +'&via='+ results['via'],  '', 'menubar=no, location=no, resizable=no, scrollbars=no, status=no');
+                newTab = 'https://twitter.com/intent/tweet?url='+ results['tinyPath'] +'&text='+ results['title'] +'&hashtags='+ results['tags'] +'&via='+ results['via'];
+            } else if (type == 'facebook') {
+                newTab = 'http://www.facebook.com/sharer.php?u=' + results['tinyPath'] + '&t=' + encodeURIComponent(results['title']);
+            } else {
+                showThankPopup();
+            }
+
+            if (newTab != '') {
+                // Open New/Popup Tab
+                //var win = window.open(newTab,  '', 'menubar=no, location=no, resizable=no, scrollbars=no, status=no, Fullscreen=yes');
+                //window.onunload = showThankPopup;
+                loadFrame(type, newTab);
             }
 
         });
@@ -341,28 +374,14 @@ function share(type)
 
             break;
 
-            default :
+            case 'print':
 
-                $('#load-frame').remove();
-                $('#preview-page').append('<iframe id="load-frame" class="frame" frameborder="0" allowfullscreen ></iframe>');
+                loadFrame(type);
 
+            break;
 
-                $iframe = $('#load-frame').contents().find('body')[0];   
-                $iframe.style.overflow = 'hidden';
-
-                if( type == 'print' ) {
-                    // Print
-                    $iframe.innerHTML = '<img src="'+ imgURL +'" style="width: 100%; height: 100%" onload="window.print();"/>';
-                    
-                    showPopup();
-                    $('#load-frame').hide();
-                    setTimeout(function(){
-                        showPopup($('#popup'), false);
-                        show('home');
-                    }, 4000);
-                    
-                }
-
+            default:
+                alert('Oops: Something went wrong.. Please try again!');
             break;
 
         }
@@ -370,14 +389,58 @@ function share(type)
     
 }
 
+function loadFrame(type, url) 
+{
+    $('.load-frame').remove();
+    
+
+    if( type == 'print' ) {
+        // Print
+
+        $('#preview-page').append('<iframe id="load-frame" class="frame load-frame" frameborder="0" allowfullscreen ></iframe>');
+        $iframe = $('#load-frame').contents().find('body')[0];   
+        $iframe.style.overflow = 'hidden';
+
+        $iframe.innerHTML = '<img src="'+ imgURL +'" style="width: 100%;" onload="window.print();"/>';
+        
+        showPopup();
+        $('#load-frame').hide();
+        setTimeout(function(){
+            showPopup($('#popup'), false);
+            show('home');
+        }, 4000);
+        
+    } else if(type == 'website') {
+
+        $('#website-page .content').append('<iframe class="load-frame frame" src="'+ url +'" frameborder="0" allowfullscreen style="height: '+ ($(window).height()-100) +'px;" ></iframe>');
+        $iframe = $('#website-page .load-frame').contents().find('body')[0];
+        //$('#website-page .load-frame').onload = showPopup($('#loading-popup'), false);
+
+    } else {
+        // Load URL
+        $('body').append('<div ><iframe target="_top" class="load-frame" src="'+ url +'"></iframe></div>');
+
+        //$('#load-frame').attr('src', url.replace("watch?v=", "v/"));
+        //window.location.href = url;
+
+    }
+}
+
 function preview(){
     $('#share-inp-block, #share-inp-block .inp').hide();
+
+    // Template 
+    $('#preview-frame').addClass('tmpl-1');
 
     var ratio = $video.videoWidth / $video.videoHeight; // 640 x 480 = 1.333333333
     var w = $video.videoWidth - 35;                     
     var h = parseInt(w / ratio, 10);                    
+    //#$canvas.width = w+6;
     $canvas.width = w+6;
-    $canvas.height = h;  
+    $canvas.height = h;
+
+    ctx.canvas.width = w;
+    ctx.canvas.height = h;  
 
     //$video.pause();
     ctx.drawImage($video, 0, 0, w, h);
@@ -399,41 +462,46 @@ function show(page){
     $('.page.active').fadeOut('slow').removeClass('active');
     $('#dock-container').removeClass('pop');
 
-	switch(page) {
+    switch(page) {
 
-		default:
-		case 'home' :
+        default:
+        case 'home' :
 
-			// Home 
-			page = 'home';
+            // Home 
+            page = 'home';
             resetShare();
         break;
             
-		case 'prepare' :
+        case 'prepare' :
 
-			// Prepare to init
-			setTimeout(function(){
-				show('init');
-			}, 4000);	
-		break;	
+            // Prepare to init
+            setTimeout(function(){
+                show('init');
+            }, 4000);   
+        break;  
 
-		case 'init' :
-			
-			// Init Snapshot
-			openCamera();
-		break;
+        case 'init' :
+            
+            // Init Snapshot
+            openCamera();
+        break;
             
         case 'preview' :
             
             preview();
         break;
-		
-	}
+
+        case 'website':
+                //showPopup($('#loading-popup'));
+                loadFrame(page, webLink);
+        break;
+        
+    }
 
     $('body').attr('id', 'body-' + page);
-	$('#'+ page +'-page').fadeIn('slow', function(){
-		$(this).addClass('active');
-	});
+    $('#'+ page +'-page').fadeIn('slow', function(){
+        $(this).addClass('active');
+    });
 
 }
 
@@ -452,13 +520,18 @@ function init(){
     
     $canvas = document.getElementById('preview-frame');
     ctx = $canvas.getContext('2d');
+
+    $('.frame-full').css({'min-height': window.innerHeight-200});
 }
 
 window.onload = init;
 
 $(document).on('ready', function(){
-    //alert($(window).width() + ', ' +$(window).height());
-    show('home'); //# 
+    show('home'); //#
+
+    //loadFrame('facebook', 'http://naturals.in/');
+
+
 
     $('.dialog .close-btn').on('click', function(){
         showPopup($(this).parent().closest('.dialog'), false);
@@ -481,8 +554,12 @@ $(document).on('ready', function(){
     });
 
     $('#start-btn').on('click', function(){
-		show('prepare');
-	});
+        show('prepare');
+    });
+
+    $('#web-start-btn').on('click', function(){
+        show('website');    
+    });
     
     $('#dock-container .icon, #share-sbmt-btn, #preview-ctrls > div').on('click', function(){
         var id = $(this).attr('id');
